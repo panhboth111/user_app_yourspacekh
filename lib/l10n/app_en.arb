@@ -1,0 +1,20 @@
+{
+    "language" :"English",
+    "@language":{
+        "description":"The current language"
+    },
+    "search":"Where to park?",
+    "welcome":"Welcome",
+    "edit_profile":"Edit Profile",
+    "parking_history":"Parking History",
+    "change_language":"Change Language",
+    "faq":"Frequently Asked Questions",
+    "terms_and_condition":"Terms and Conditions",
+    "logout":"Logout",
+    "back_home":"Back to Home",
+    "your_name":"Your Name",
+    "phone":"Phone Number",
+    "no_history":"No history yet",
+    "no_history_desc":"Hit the blue button down below to look for space",
+    "look_for_space":"Start Looking for Space"
+}

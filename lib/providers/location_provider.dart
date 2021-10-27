@@ -19,19 +19,15 @@ class LocationProvider extends ChangeNotifier {
     PermissionStatus _permissionGranted;
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
-      print("service not enabled");
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
-        print("service not allowed");
         return;
       }
     }
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
-      print("no permission");
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
-        print("permission not granted");
         return;
       }
     }

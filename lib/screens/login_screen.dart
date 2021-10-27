@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
+import 'package:user_app_yourspacekh/screens/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -23,7 +24,15 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void _onSubmitPin() {}
+  void _onSubmitPin() {
+    Navigator.pushReplacement<void, void>(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => RegisterScreen(),
+      ),
+    );
+  }
+
   void _onPhoneTextChanged(value) {
     if (!_phoneBtnEnabled) {
       if (_phoneController.text.length > 0) {
@@ -41,6 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onPinTextChanged(value) {
+    print("triggered");
     if (!_pinBtnEnabled) {
       if (_pinController.text.length > 0) {
         setState(() {
@@ -101,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _getConfirmCodeScreen() {
+  Widget _getPinScreen() {
     return Column(
       children: [
         Text(
@@ -112,6 +122,8 @@ class _LoginScreenState extends State<LoginScreen> {
         Container(
             margin: EdgeInsets.only(top: 40),
             child: PinCodeTextField(
+              keyboardType: TextInputType.number,
+              controller: _pinController,
               length: 6,
               appContext: context,
               onChanged: _onPinTextChanged,
@@ -127,8 +139,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   inactiveFillColor: Color(0xffF2F2F7)),
             )),
         Container(
+          margin: EdgeInsets.only(top: 20),
+          child: Text(
+            "Code expires in 90 seconds",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.grey[500]),
+          ),
+        ),
+        Container(
           width: double.infinity,
-          margin: EdgeInsets.only(top: 40),
+          margin: EdgeInsets.only(top: 20),
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor),
@@ -166,9 +186,8 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Container(
             width: double.infinity,
             margin: EdgeInsets.only(left: 15, right: 15, top: 25),
-            child: _loginStage == 0
-                ? _getPhoneScreen(context)
-                : _getConfirmCodeScreen()),
+            child:
+                _loginStage == 0 ? _getPhoneScreen(context) : _getPinScreen()),
       ),
     );
   }

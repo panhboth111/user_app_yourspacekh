@@ -1,0 +1,20 @@
+{
+    "language" :"Central Khmer",
+    "@language":{
+        "description":"The current language"
+    },
+    "search":"ស្វែងរកកន្លែងចតរថយន្ត?",
+    "welcome":"សូមស្វាគមន៍",
+    "edit_profile":"កែប្រវត្តិរូប",
+    "parking_history":"ប្រវត្តិកន្លែងចតរថយន្ត",
+    "change_language":"ប្ដូរ​ភាសា",
+    "faq":"សំណួរ​ដែលគេ​ច្រើន​សួរ",
+    "terms_and_condition":"​លក្ខខណ្ឌ",
+    "logout":"ចាកចេញ",
+    "back_home":"ត្រឡប់ទៅទំព័រដំបូង",
+    "your_name":"ឈ្មោះ​របស់​អ្នក",
+    "phone":"លេខទូរសព្ទ",
+    "no_history":"មិនទាន់មានប្រវត្តិចតរថយន្តនៅឡើយទេ",
+    "no_history_desc":"ចុចប៊ូតុងពណ៌ខៀវខាងក្រោមដើម្បីរកមើលកន្លែងចតរថយន្ត",
+    "look_for_space":"រកមើលកន្លែងចតរថយន្ត"
+}
