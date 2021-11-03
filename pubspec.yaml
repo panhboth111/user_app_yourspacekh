@@ -44,6 +44,11 @@ dependencies:
   dropdown_search: ^1.0.4
   http: ^0.13.4
   intl: ^0.17.0
+  datetime_picker_formfield: ^2.0.0
+  firebase_core: ^1.8.0
+  flutter_local_notifications: ^9.0.2
+  firebase_messaging: ^10.0.9
+
 
 dev_dependencies:
   flutter_test:

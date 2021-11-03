@@ -1,23 +1,28 @@
-import 'dart:math';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/l10n/l10n.dart';
 import 'package:user_app_yourspacekh/providers/auth_provider.dart';
+import 'package:user_app_yourspacekh/providers/bottom_card_provider.dart';
 import 'package:user_app_yourspacekh/providers/language_provider.dart';
 import 'package:user_app_yourspacekh/providers/location_provider.dart';
-import 'package:user_app_yourspacekh/screens/home_screen.dart';
-import 'package:user_app_yourspacekh/screens/login_screen.dart';
+import 'package:user_app_yourspacekh/screens/home_screen/home_screen.dart';
+
 import 'package:user_app_yourspacekh/services/user_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => LocationProvider()),
       ChangeNotifierProvider(create: (_) => AuthProvider()),
       ChangeNotifierProvider(create: (_) => LanguageProvider()),
+      ChangeNotifierProvider(create: (_) => BottomCardProvider()),
     ],
     child: MyApp(),
   ));
@@ -36,6 +41,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     userService
         .getUserInformation()
         .then((user) =>
@@ -49,20 +55,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(primaryColor: Color(0xff3277D8)),
-      debugShowCheckedModeBanner: false,
-      locale: Provider.of<LanguageProvider>(context, listen: false).locale,
-      supportedLocales: L10n.all,
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
-      home: SafeArea(
-        child: HomeScreen(),
-      ),
+    return Consumer<LanguageProvider>(
+      builder: (consumerContext, model, child) {
+        return MaterialApp(
+          theme: ThemeData(
+              primaryColor: Color(0xff3277D8),
+              inputDecorationTheme:
+                  InputDecorationTheme(border: OutlineInputBorder())),
+          debugShowCheckedModeBanner: false,
+          locale: Provider.of<LanguageProvider>(context, listen: false).locale,
+          supportedLocales: L10n.all,
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate
+          ],
+          home: SafeArea(
+            child: HomeScreen(),
+          ),
+        );
+      },
     );
   }
 }

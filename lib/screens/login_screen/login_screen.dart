@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
-import 'package:user_app_yourspacekh/screens/register_screen.dart';
+
+import 'package:user_app_yourspacekh/screens/register_screen/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/providers/auth_provider.dart';
-import 'package:user_app_yourspacekh/screens/change_language_screen.dart';
-import 'package:user_app_yourspacekh/screens/edit_profile_screen.dart';
-import 'package:user_app_yourspacekh/screens/faq_screen.dart';
-import 'package:user_app_yourspacekh/screens/parking_history.dart';
-import 'package:user_app_yourspacekh/screens/terms_screen.dart';
+import 'package:user_app_yourspacekh/screens/profile_screen/change_language_screen.dart';
+
+import 'package:user_app_yourspacekh/screens/profile_screen/faq_screen.dart';
+import 'package:user_app_yourspacekh/screens/profile_screen/parking_history.dart';
+import 'package:user_app_yourspacekh/screens/profile_screen/edit_profile_screen.dart';
+import 'package:user_app_yourspacekh/screens/profile_screen/terms_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileScreen extends StatelessWidget {

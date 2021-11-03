@@ -8,10 +8,10 @@ class LocationProvider extends ChangeNotifier {
   LatLng? _locationPosition;
   LatLng? get locationPosition => _locationPosition;
   LocationProvider() {
-    _location = new Location();
+    _location = Location();
   }
   initialize() async {
-    await this.getUserLocation();
+    await getUserLocation();
   }
 
   getUserLocation() async {
