@@ -12,6 +12,6 @@ class UserService {
   }
 
   Future<UserModel?> getUserInformation() async {
-    return await _parseUserModel("");
+    return _parseUserModel("");
   }
 }

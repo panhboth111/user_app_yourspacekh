@@ -11,9 +11,9 @@ import 'package:user_app_yourspacekh/screens/login_screen/login_screen.dart';
 import 'package:user_app_yourspacekh/screens/profile_screen/profile_screen.dart';
 
 class HomeUI extends StatelessWidget {
-  var currentLocation;
+  final currentLocation;
 
-  SpaceModel? activeSpace;
+  late SpaceModel? activeSpace;
 
   HomeUI({Key? key, this.currentLocation, this.activeSpace});
 
@@ -25,16 +25,17 @@ class HomeUI extends StatelessWidget {
   void onContactUsPressed() {}
   void onCancelBookingPressed() {}
   void onQRCodePressed() {}
+
   Widget _getBottomCardContainer(
       BuildContext context, int bottomCardType, SpaceModel activeSpace) {
     switch (bottomCardType) {
       case 1:
-        return Container(
+        return SizedBox(
           width: double.infinity,
           child: Card(
             elevation: 11,
             child: Container(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
                   Row(
@@ -46,10 +47,10 @@ class HomeUI extends StatelessWidget {
                         children: [
                           Text(
                             activeSpace.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           ),
-                          Text(
+                          const Text(
                             "№ 101, St. 254",
                             style: TextStyle(
                                 fontSize: 14, color: Color(0xff7f7f7f)),
@@ -65,7 +66,7 @@ class HomeUI extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).primaryColor),
                           ),
-                          Text(
+                          const Text(
                             "Parking",
                             style: TextStyle(
                                 fontSize: 12, color: Color(0xffa5aab7)),
@@ -74,7 +75,7 @@ class HomeUI extends StatelessWidget {
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Row(
@@ -88,10 +89,10 @@ class HomeUI extends StatelessWidget {
                                 Icons.cases_sharp,
                                 color: Theme.of(context).primaryColor,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 4,
                               ),
-                              Text("Open:24/7"),
+                              const Text("Open:24/7"),
                             ],
                           ),
                           Row(
@@ -100,7 +101,7 @@ class HomeUI extends StatelessWidget {
                                 Icons.car_rental,
                                 color: Theme.of(context).primaryColor,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 4,
                               ),
                               Text("Price: " + activeSpace.price),
@@ -108,14 +109,13 @@ class HomeUI extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Container(
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.only(left: 30, right: 30),
-                                primary: Theme.of(context).primaryColor),
-                            child: Text("Book Spot"),
-                            onPressed: () => onBookSpotPressed(context)),
-                      )
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              padding:
+                                  const EdgeInsets.only(left: 30, right: 30),
+                              primary: Theme.of(context).primaryColor),
+                          child: const Text("Book Spot"),
+                          onPressed: () => onBookSpotPressed(context))
                     ],
                   )
                 ],
@@ -128,6 +128,7 @@ class HomeUI extends StatelessWidget {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Consumer<BottomCardProvider>(
         builder: (consumerContext, model, child) {
