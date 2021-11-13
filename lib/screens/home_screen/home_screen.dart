@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/models/space_model.dart';
-import 'package:user_app_yourspacekh/providers/location_provider.dart';
 import 'package:user_app_yourspacekh/providers/space_provider.dart';
 import 'package:user_app_yourspacekh/screens/home_screen/home_ui.dart';
 import 'package:user_app_yourspacekh/screens/home_screen/map_ui.dart';
@@ -24,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    Provider.of<LocationProvider>(context, listen: false).initialize();
     Provider.of<SpaceProvider>(context, listen: false).initialize();
   }
 

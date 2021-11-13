@@ -6,7 +6,6 @@ import 'package:user_app_yourspacekh/l10n/l10n.dart';
 import 'package:user_app_yourspacekh/providers/auth_provider.dart';
 import 'package:user_app_yourspacekh/providers/bottom_card_provider.dart';
 import 'package:user_app_yourspacekh/providers/language_provider.dart';
-import 'package:user_app_yourspacekh/providers/location_provider.dart';
 import 'package:user_app_yourspacekh/providers/space_provider.dart';
 import 'package:user_app_yourspacekh/screens/home_screen/home_screen.dart';
 
@@ -18,7 +17,6 @@ Future<void> main() async {
   await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => LocationProvider()),
       ChangeNotifierProvider(create: (_) => AuthProvider()),
       ChangeNotifierProvider(create: (_) => LanguageProvider()),
       ChangeNotifierProvider(create: (_) => BottomCardProvider()),

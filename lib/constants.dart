@@ -1,1 +1,1 @@
-const kBaseUrl = "http://172.104.165.93:8081";
+const kBaseUrl = "http://139.59.101.195:8081";
