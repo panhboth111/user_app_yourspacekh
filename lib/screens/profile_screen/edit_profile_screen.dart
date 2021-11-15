@@ -46,9 +46,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     // TODO: implement initState
     super.initState();
     UserModel user = Provider.of<AuthProvider>(context, listen: false).user!;
-    _nameController.text = user.name;
-    _phoneController.text = user.phoneNumber;
-    _telegramController.text = user.phoneNumber;
+    _nameController.text = user.name!;
+    _phoneController.text = user.phoneNumber!;
+    _telegramController.text = user.phoneNumber!;
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -9,7 +10,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  List<String> _cities = [
+  final List<String> _cities = [
     "Phnom Penh",
     "Battambang",
     "Kompong spue",
@@ -17,9 +18,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     "Kompot",
     "Posat"
   ];
-  TextEditingController _cityFieldController = TextEditingController();
+  final TextEditingController _cityFieldController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    var appLocal = AppLocalizations.of(context);
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -27,65 +29,66 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: const EdgeInsets.only(top: 50),
               child: Text(
-                "Basic Info",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+                appLocal!.basic_info,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
               ),
             ),
             Container(
-                margin: EdgeInsets.only(top: 20),
-                padding: EdgeInsets.all(20),
-                color: Color(0xffF0F2F4),
+                margin: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.all(20),
+                color: const Color(0xffF0F2F4),
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.lock,
                       color: Color(0xff79808F),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     Flexible(
                         child: Text(
-                      "We take privacy issues seriously. You can be sure that your data is securely protected.",
+                      appLocal.basic_info_desc,
                     ))
                   ],
                 )),
             Container(
-              margin: EdgeInsets.only(left: 20, right: 20, top: 40),
+              margin: const EdgeInsets.only(left: 20, right: 20, top: 40),
               child: Column(
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Your Name"),
+                      Text(appLocal.your_name),
                       Container(
-                        margin: EdgeInsets.only(top: 7),
+                        margin: const EdgeInsets.only(top: 7),
                         height: 37,
-                        child: TextField(
-                            keyboardType: TextInputType.phone,
+                        child: const TextField(
+                            keyboardType: TextInputType.text,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: Colors.grey, width: 1.0),
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1.0),
                               ),
                             )),
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Vehicle Number"),
+                      Text(appLocal.vehicle_number),
                       Row(
                         children: [
                           Flexible(
                               child: Container(
-                            margin: EdgeInsets.only(top: 7, right: 5),
+                            margin: const EdgeInsets.only(top: 7, right: 5),
                             height: 37,
                             child: DropdownSearch<String>(
                                 mode: Mode.MENU,
@@ -96,13 +99,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           )),
                           Flexible(
                               child: Container(
-                            margin: EdgeInsets.only(top: 7, right: 10),
+                            margin: const EdgeInsets.only(top: 7, right: 10),
                             height: 37,
-                            child: TextField(
-                                keyboardType: TextInputType.phone,
+                            child: const TextField(
+                                keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
+                                    borderSide: BorderSide(
                                         color: Colors.grey, width: 1.0),
                                   ),
                                 )),
@@ -118,7 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).primaryColor),
-                      child: Text("Submit"),
+                      child: const Text("Submit"),
                       onPressed: () {
                         Navigator.pop(context);
                       },

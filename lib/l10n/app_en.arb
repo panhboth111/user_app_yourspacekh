@@ -16,5 +16,8 @@
     "phone":"Phone Number",
     "no_history":"No history yet",
     "no_history_desc":"Hit the blue button down below to look for space",
-    "look_for_space":"Start Looking for Space"
+    "look_for_space":"Start Looking for Space",
+    "basic_info":"Basic Info",
+    "basic_info_desc":"We take privacy issues seriously. You can be sure that your data is securely protected.",
+    "vehicle_number":"Vehicle Number"
 }

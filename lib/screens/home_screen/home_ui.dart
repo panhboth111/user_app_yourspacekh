@@ -9,6 +9,7 @@ import 'package:user_app_yourspacekh/providers/bottom_card_provider.dart';
 import 'package:user_app_yourspacekh/screens/booking_screen/confirm_booking_screen.dart';
 import 'package:user_app_yourspacekh/screens/login_screen/login_screen.dart';
 import 'package:user_app_yourspacekh/screens/profile_screen/profile_screen.dart';
+import 'package:user_app_yourspacekh/screens/register_screen/register_screen.dart';
 
 class HomeUI extends StatelessWidget {
   final currentLocation;
@@ -155,13 +156,25 @@ class HomeUI extends StatelessWidget {
                   const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  Provider.of<AuthProvider>(context).isAuthed
-                                      ? const ProfileScreen()
-                                      : const LoginScreen()));
+                      int status =
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .authStatus;
+                      if (status == 0) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()));
+                      } else if (status == 1) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterScreen()));
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ProfileScreen()));
+                      }
                     },
                     child: const Icon(Icons.person, color: Colors.black),
                     style: ElevatedButton.styleFrom(

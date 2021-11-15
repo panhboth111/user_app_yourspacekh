@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
         .then((value) => Provider.of<LanguageProvider>(context, listen: false)
             .setLocale(Locale(Provider.of<AuthProvider>(context, listen: false)
                 .user!
-                .language)));
+                .language!)));
   }
 
   @override

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:pin_input_text_field/pin_input_text_field.dart';
-
+import 'package:pinput/pin_put/pin_put.dart';
+import 'package:user_app_yourspacekh/screens/home_screen/home_screen.dart';
 import 'package:user_app_yourspacekh/screens/register_screen/register_screen.dart';
+import 'package:user_app_yourspacekh/services/user_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,36 +13,59 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   int _loginStage = 0;
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _pinController = TextEditingController();
+  String? errorMsg = "";
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _pinController = TextEditingController();
+  final UserService _userService = UserService();
 
   bool _phoneBtnEnabled = false;
   bool _pinBtnEnabled = false;
 
-  void _onSubmitPhone() {
+  void _onSubmitPhone() async {
     setState(() {
       _loginStage = 1;
+      errorMsg = "";
+    });
+    final response = await _userService.login(_phoneController.text);
+    if (!response['success']) {
+      setState(() {
+        errorMsg = response["errors"].toString();
+      });
+      return;
+    }
+    setState(() {
+      _loginStage = 1;
+      errorMsg = "";
     });
   }
 
-  void _onSubmitPin() {
+  void _onSubmitPin() async {
+    final response = await _userService.verifyPhoneNumber(_pinController.text);
+    if (!response['success']) {
+      setState(() {
+        errorMsg = response["errors"].toString();
+      });
+      return;
+    }
     Navigator.pushReplacement<void, void>(
       context,
       MaterialPageRoute<void>(
-        builder: (BuildContext context) => RegisterScreen(),
+        builder: (BuildContext context) => response['body']['name'] == null
+            ? const RegisterScreen()
+            : const HomeScreen(),
       ),
     );
   }
 
   void _onPhoneTextChanged(value) {
     if (!_phoneBtnEnabled) {
-      if (_phoneController.text.length > 0) {
+      if (_phoneController.text.isNotEmpty) {
         setState(() {
           _phoneBtnEnabled = true;
         });
       }
     } else if (_phoneBtnEnabled) {
-      if (_phoneController.text.length == 0) {
+      if (_phoneController.text.isEmpty) {
         setState(() {
           _phoneBtnEnabled = false;
         });
@@ -51,17 +74,17 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onPinTextChanged(value) {
-    print("triggered");
     if (!_pinBtnEnabled) {
-      if (_pinController.text.length > 0) {
+      if (_pinController.text.length == 4) {
         setState(() {
           _pinBtnEnabled = true;
         });
       }
     } else if (_pinBtnEnabled) {
-      if (_pinController.text.length == 0) {
+      if (_pinController.text.length < 4) {
         setState(() {
           _pinBtnEnabled = false;
+          errorMsg = "";
         });
       }
     }
@@ -69,42 +92,58 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _getPhoneScreen(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Log In",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+        Container(
+          width: double.infinity,
+          child: const Text(
+            "Log In",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+          ),
         ),
         Container(
-            margin: EdgeInsets.only(top: 40),
+            margin: const EdgeInsets.only(top: 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Phone Number"),
+                const Text("Phone Number"),
                 Container(
-                  margin: EdgeInsets.only(top: 5),
+                  margin: const EdgeInsets.only(top: 5),
                   height: 40,
                   child: TextField(
                       onChanged: _onPhoneTextChanged,
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.flag),
-                        border: OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                      )),
+                          suffixIcon: Icon(
+                            Icons.flag,
+                            color: errorMsg!.isEmpty ? Colors.blue : Colors.red,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: errorMsg!.isEmpty
+                                    ? Colors.blue
+                                    : Colors.red,
+                                width: 2.0),
+                          ))),
                 ),
               ],
             )),
         Container(
+          child: Text(
+            errorMsg!,
+            style: const TextStyle(color: Colors.red),
+          ),
+          margin: const EdgeInsets.only(top: 10),
+        ),
+        Container(
           width: double.infinity,
-          margin: EdgeInsets.only(top: 40),
+          margin: const EdgeInsets.only(top: 20),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 primary: Theme.of(context).primaryColor),
-            child: Text("Send Code"),
+            child: const Text("Send Code"),
             onPressed: _phoneBtnEnabled ? _onSubmitPhone : null,
           ),
         )
@@ -112,35 +151,49 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _getPinScreen() {
+  BoxDecoration get _pinPutDecoration {
+    return const BoxDecoration(color: Color(0xfff2f2f7));
+  }
+
+  Widget _getPinScreen(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Confirmation",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+        Container(
+          width: double.infinity,
+          child: const Text(
+            "Confirmation",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+          ),
         ),
         Container(
-            margin: EdgeInsets.only(top: 40),
-            child: PinCodeTextField(
-              keyboardType: TextInputType.number,
-              controller: _pinController,
-              length: 6,
-              appContext: context,
-              onChanged: _onPinTextChanged,
-              enableActiveFill: true,
-              pinTheme: PinTheme(
-                  fieldWidth: 50,
-                  shape: PinCodeFieldShape.box,
-                  activeFillColor: Color(0xffF2F2F7),
-                  selectedFillColor: Color(0xffF2F2F7),
-                  selectedColor: Color(0xffF2F2F7),
-                  activeColor: Color(0xffF2F2F7),
-                  inactiveColor: Color(0xffF2F2F7),
-                  inactiveFillColor: Color(0xffF2F2F7)),
-            )),
+          margin: const EdgeInsets.only(top: 30),
+          child: PinPut(
+            onChanged: _onPinTextChanged,
+            eachFieldConstraints:
+                const BoxConstraints(minHeight: 56.0, minWidth: 54),
+            fieldsCount: 6,
+            onSubmit: (value) {},
+            controller: _pinController,
+            submittedFieldDecoration: _pinPutDecoration.copyWith(
+                border: Border.all(
+                    color: errorMsg!.isEmpty ? Colors.blue : Colors.red,
+                    width: 2)),
+            selectedFieldDecoration: _pinPutDecoration,
+            followingFieldDecoration: _pinPutDecoration.copyWith(),
+          ),
+        ),
         Container(
-          margin: EdgeInsets.only(top: 20),
+          child: Text(
+            errorMsg!,
+            style: const TextStyle(color: Colors.red),
+          ),
+          margin: const EdgeInsets.only(top: 5),
+        ),
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 20),
           child: Text(
             "Code expires in 90 seconds",
             textAlign: TextAlign.center,
@@ -149,11 +202,11 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         Container(
           width: double.infinity,
-          margin: EdgeInsets.only(top: 20),
+          margin: const EdgeInsets.only(top: 20),
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor),
-              child: Text("Log in"),
+              child: const Text("Log in"),
               onPressed: _pinBtnEnabled ? _onSubmitPin : null),
         )
       ],
@@ -161,34 +214,41 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            if (_loginStage == 0) {
-              Navigator.pop(context);
-            } else {
-              setState(() {
-                _loginStage = 0;
-              });
-            }
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
+        leading: _loginStage != 0
+            ? IconButton(
+                onPressed: () {
+                  setState(() {
+                    _loginStage = 0;
+                    errorMsg = "";
+                  });
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
+              )
+            : null,
       ),
       body: SafeArea(
         child: Container(
             width: double.infinity,
-            margin: EdgeInsets.only(left: 15, right: 15, top: 25),
-            child:
-                _loginStage == 0 ? _getPhoneScreen(context) : _getPinScreen()),
+            margin: const EdgeInsets.only(left: 15, right: 15, top: 25),
+            child: _loginStage == 0
+                ? _getPhoneScreen(context)
+                : _getPinScreen(context)),
       ),
     );
   }

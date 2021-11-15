@@ -1,9 +1,10 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConfirmBookingScreen extends StatefulWidget {
-  ConfirmBookingScreen({Key? key}) : super(key: key);
+  const ConfirmBookingScreen({Key? key}) : super(key: key);
 
   @override
   State<ConfirmBookingScreen> createState() => _ConfirmBookingScreenState();
@@ -11,8 +12,10 @@ class ConfirmBookingScreen extends StatefulWidget {
 
 class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
   late DateTime selectedDate;
-  TextEditingController _datePickerFieldController = TextEditingController();
-  TextEditingController _timePickerFieldController = TextEditingController();
+  final TextEditingController _datePickerFieldController =
+      TextEditingController();
+  final TextEditingController _timePickerFieldController =
+      TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -29,6 +32,7 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var appLocal = AppLocalizations.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -129,7 +133,7 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                                 ],
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 100,
                             ),
                             Container(

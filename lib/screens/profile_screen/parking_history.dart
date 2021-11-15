@@ -9,35 +9,35 @@ class ParkingHistoryScreen extends StatefulWidget {
 class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
   Widget _getNoHistoryUI(appLocal) {
     return Container(
-      margin: EdgeInsets.only(top: 80),
+      margin: const EdgeInsets.only(top: 80),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.calendar_today,
             size: 120,
             color: Color(0xffc7c7c7),
           ),
           Container(
-            margin: EdgeInsets.only(top: 20),
+            margin: const EdgeInsets.only(top: 20),
             child: Text(
               appLocal.no_history,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 20),
-            padding: EdgeInsets.only(left: 70, right: 70),
+            margin: const EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(left: 70, right: 70),
             child: Text(
               appLocal.no_history_desc,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 17),
+              style: const TextStyle(fontSize: 17),
             ),
           ),
           Container(
             width: double.infinity,
-            margin: EdgeInsets.only(top: 80),
+            margin: const EdgeInsets.only(top: 80),
             height: 41,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -68,7 +68,7 @@ class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
@@ -76,12 +76,12 @@ class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
       ),
       body: Container(
         width: double.infinity,
-        margin: EdgeInsets.only(top: 25, left: 20, right: 20),
+        margin: const EdgeInsets.only(top: 25, left: 20, right: 20),
         child: Column(
           children: [
             Text(
               appLocal!.parking_history,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
               textAlign: TextAlign.center,
             ),
             _getNoHistoryUI(appLocal)

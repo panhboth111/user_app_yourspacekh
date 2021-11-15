@@ -62,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
                     Text(
                       Provider.of<AuthProvider>(context, listen: false)
                           .user!
-                          .name,
+                          .name!,
                       style: TextStyle(
                           color: Theme.of(context).primaryColor, fontSize: 35),
                     ),
