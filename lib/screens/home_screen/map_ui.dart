@@ -45,7 +45,6 @@ class _MapUIState extends State<MapUI> {
         icon:
             _selectedSpaceId == space.id ? _selectedMarkerIcon! : _markerIcon!,
         onTap: () {
-          print("tapped");
           setState(() {
             _selectedSpaceId = space.id;
           });
@@ -146,7 +145,7 @@ class _MapUIState extends State<MapUI> {
   Marker _buildLocationMarker() {
     return Marker(
         markerId: const MarkerId("myLocation"),
-        anchor: const ui.Offset(0.5, 0.5),
+        anchor: const ui.Offset(0.5, 0.560546875),
         icon: _currentLocationIcon!,
         position: _currentLocation!,
         rotation: _currentHeading!);
