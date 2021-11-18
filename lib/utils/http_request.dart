@@ -28,16 +28,12 @@ class HttpRequest {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken',
       };
+
       final response = await http.post(url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': isPrivateRoute ? '' : ''
-          },
-          body: convert.jsonEncode(requestBody));
+          headers: headers, body: convert.jsonEncode(requestBody));
       if (response.statusCode == 401) {
         final res = await _handleRefreshToken(refreshToken);
         if (res['success']) {
-          print(res['body']['accessToken']);
           prefs.setString('accessToken', res['body']['accessToken']);
 
           return getRequest(endPoint, isPrivateRoute);
@@ -75,6 +71,7 @@ class HttpRequest {
         };
       }
       accessToken = prefs.getString("accessToken")!;
+      print(accessToken);
     }
 
     final url = Uri.parse(baseURL + endPoint);
@@ -84,7 +81,6 @@ class HttpRequest {
       'Authorization': 'Bearer $accessToken',
     };
     final response = await http.get(url, headers: headers);
-    print(response.body);
     if (response.statusCode == 401) {
       final res = await _handleRefreshToken(refreshToken);
       if (res['success']) {
@@ -100,6 +96,57 @@ class HttpRequest {
       'body': convert.jsonDecode(response.body),
       'error': null
     };
+  }
+
+  static patchRequest(
+      String endPoint, bool isPrivateRoute, dynamic requestBody) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String accessToken = "";
+    String refreshToken = "";
+    try {
+      if (isPrivateRoute) {
+        refreshToken = prefs.getString("refreshToken")!;
+        if (refreshToken.isEmpty) {
+          return {
+            'success': false,
+            'body': null,
+            'errors': 'Session expired please login again'
+          };
+        }
+        accessToken = prefs.getString("accessToken")!;
+      }
+
+      final url = Uri.parse(baseURL + endPoint);
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      };
+
+      final response = await http.patch(url,
+          headers: headers, body: convert.jsonEncode(requestBody));
+      if (response.statusCode == 401) {
+        final res = await _handleRefreshToken(refreshToken);
+        if (res['success']) {
+          prefs.setString('accessToken', res['body']['accessToken']);
+
+          return getRequest(endPoint, isPrivateRoute);
+        }
+        return res;
+      }
+      return response.statusCode == 200
+          ? {
+              'success': true,
+              'body': convert.jsonDecode(response.body),
+              'errors': ''
+            }
+          : {
+              'success': false,
+              'body': null,
+              'errors': convert.jsonDecode(response.body)['errors']['message']
+            };
+    } catch (e) {
+      return {'success': false, 'body': null, 'errors': e.toString()};
+    }
   }
 
   static _handleRefreshToken(String refreshToken) async {

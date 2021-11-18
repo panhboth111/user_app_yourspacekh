@@ -45,6 +45,7 @@ class _MapUIState extends State<MapUI> {
         icon:
             _selectedSpaceId == space.id ? _selectedMarkerIcon! : _markerIcon!,
         onTap: () {
+          print("tapped");
           setState(() {
             _selectedSpaceId = space.id;
           });

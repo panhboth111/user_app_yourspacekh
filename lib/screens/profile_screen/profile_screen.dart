@@ -15,8 +15,8 @@ class ProfileScreen extends StatelessWidget {
   Widget _getHomeAction(
       BuildContext context, String title, IconData icon, Widget screen) {
     return Container(
-      padding: EdgeInsets.only(top: 10, bottom: 10, right: 10),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
+      decoration: const BoxDecoration(
           border:
               Border(bottom: BorderSide(width: 1, color: Color(0xffe0e0e0)))),
       child: ListTile(
@@ -30,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: TextStyle(fontSize: 17),
+          style: const TextStyle(fontSize: 17),
         ),
       ),
     );
@@ -42,77 +42,75 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-          child: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 10, left: 30, top: 40),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      appLocal!.welcome,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[400]),
-                    ),
-                    Text(
-                      Provider.of<AuthProvider>(context, listen: false)
-                          .user!
-                          .name!,
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor, fontSize: 35),
-                    ),
-                  ],
-                ),
+          child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 10, left: 30, top: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    appLocal!.welcome,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[400]),
+                  ),
+                  Text(
+                    Provider.of<AuthProvider>(context, listen: false)
+                        .user!
+                        .name!,
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor, fontSize: 35),
+                  ),
+                ],
               ),
-              Container(
-                margin: EdgeInsets.only(right: 20, left: 20, top: 40),
-                child: Column(
-                  children: [
-                    _getHomeAction(context, appLocal.edit_profile, Icons.person,
-                        EditProfileScreen()),
-                    _getHomeAction(context, appLocal.parking_history,
-                        Icons.folder, ParkingHistoryScreen()),
-                    _getHomeAction(context, appLocal.change_language,
-                        Icons.language, ChangeLanguageScreen()),
-                    _getHomeAction(
-                        context, appLocal.faq, Icons.message, FAQScreen()),
-                    _getHomeAction(context, appLocal.terms_and_condition,
-                        Icons.article, TermsScreen()),
-                  ],
-                ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(right: 20, left: 20, top: 40),
+              child: Column(
+                children: [
+                  _getHomeAction(context, appLocal.edit_profile, Icons.person,
+                      const EditProfileScreen()),
+                  _getHomeAction(context, appLocal.parking_history,
+                      Icons.folder, const ParkingHistoryScreen()),
+                  _getHomeAction(context, appLocal.change_language,
+                      Icons.language, const ChangeLanguageScreen()),
+                  _getHomeAction(
+                      context, appLocal.faq, Icons.message, const FAQScreen()),
+                  _getHomeAction(context, appLocal.terms_and_condition,
+                      Icons.article, const TermsScreen()),
+                ],
               ),
-              Container(
-                margin: EdgeInsets.only(right: 20, left: 20, top: 40),
-                child: Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(top: 20),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).primaryColor),
-                          child: Text(appLocal.back_home),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.red),
-                          child: Text(appLocal.logout),
-                          onPressed: () {}),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(right: 20, left: 20, top: 40),
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(top: 20),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor),
+                        child: Text(appLocal.back_home),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: Colors.red),
+                        child: Text(appLocal.logout),
+                        onPressed: () {}),
+                  )
+                ],
+              ),
+            )
+          ],
         ),
       )),
     );

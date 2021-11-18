@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class L10n {
   static final all = [
-    Locale('en'),
-    Locale('km'),
+    const Locale('en'),
+    const Locale('km'),
   ];
   static String getLanguageName(String code) {
     switch (code) {

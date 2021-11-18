@@ -5,34 +5,35 @@ import 'package:user_app_yourspacekh/providers/auth_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({Key? key}) : super(key: key);
+
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
-  TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
-  TextEditingController _telegramController = TextEditingController();
+  final TextEditingController _telegramController = TextEditingController();
 
   Widget _getTextField(String title, TextEditingController controller) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title),
           Container(
-            margin: EdgeInsets.only(top: 7),
+            margin: const EdgeInsets.only(top: 7),
             height: 37,
             child: TextField(
                 controller: controller,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Colors.grey, width: 1.0),
+                    borderSide: BorderSide(color: Colors.grey, width: 1.0),
                   ),
                 )),
           )
@@ -43,7 +44,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     UserModel user = Provider.of<AuthProvider>(context, listen: false).user!;
     _nameController.text = user.name!;
@@ -63,24 +63,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
         ),
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 20, right: 20, left: 20),
+        margin: const EdgeInsets.only(top: 20, right: 20, left: 20),
         width: double.infinity,
         child: Column(
           children: [
             Text(
               appLocal!.edit_profile,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
             Container(
-              margin: EdgeInsets.only(top: 30),
+              margin: const EdgeInsets.only(top: 30),
               child: Column(
                 children: [
                   _getTextField(appLocal.your_name, _nameController),
@@ -91,12 +91,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             Container(
               width: double.infinity,
-              margin: EdgeInsets.only(top: 50),
+              margin: const EdgeInsets.only(top: 50),
               height: 41,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).primaryColor),
-                  child: Text("Update"),
+                  child: const Text("Update"),
                   onPressed: () {
                     Navigator.pop(context);
                   }),

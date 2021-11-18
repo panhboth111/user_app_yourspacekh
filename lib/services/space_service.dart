@@ -4,23 +4,26 @@ import 'package:http/http.dart' as http;
 import 'package:user_app_yourspacekh/constants.dart';
 
 import 'package:user_app_yourspacekh/models/space_model.dart';
+import 'package:user_app_yourspacekh/utils/http_request.dart';
 
 class SpaceService {
-  Set<SpaceModel> _parseSpaceModels(String resBody) {
-    final parsed = convert.jsonDecode(resBody).cast<String, dynamic>();
-    return parsed['data']
-        .map<SpaceModel>((json) => SpaceModel.fromJson(json))
-        .toSet();
+  Set<SpaceModel> _parseSpaceModels(dynamic resBody) {
+    return resBody.map<SpaceModel>((json) => SpaceModel.fromJson(json)).toSet();
   }
 
-  Future<Set<SpaceModel>> getSpaces() async {
+  getSpaces() async {
     try {
-      final url = Uri.parse(kBaseUrl + '/spaces');
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        return _parseSpaceModels(response.body);
+      final response =
+          await HttpRequest.getRequest("/spaces?nearest=20,20", true);
+
+      if (response['success']) {
+        var result = _parseSpaceModels(response['body']['data']);
+        return result;
       }
-      return {};
+      // if (response.statusCode == 200) {
+      //   return _parseSpaceModels(response.body);
+      // }
+      return null;
     } catch (e) {
       throw "Unable to Request Data";
     }

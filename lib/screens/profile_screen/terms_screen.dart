@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TermsScreen extends StatelessWidget {
+  const TermsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,14 +13,15 @@ class TermsScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
         ),
       ),
       body: Container(
-        child: Text("Terms and Condition"),
+        padding: const EdgeInsets.all(15),
+        child: const Text("Terms and Condition"),
       ),
     );
   }

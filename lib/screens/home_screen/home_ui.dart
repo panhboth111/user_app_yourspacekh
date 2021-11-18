@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_new
+// ignore_for_file: unnecessary_new, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,11 +16,11 @@ class HomeUI extends StatelessWidget {
 
   late SpaceModel? activeSpace;
 
-  HomeUI({Key? key, this.currentLocation, this.activeSpace});
+  HomeUI({Key? key, this.currentLocation, this.activeSpace}) : super(key: key);
 
   void onBookSpotPressed(BuildContext context) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => ConfirmBookingScreen()));
+        MaterialPageRoute(builder: (context) => const ConfirmBookingScreen()));
   }
 
   void onContactUsPressed() {}

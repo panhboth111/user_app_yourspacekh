@@ -5,16 +5,18 @@ import 'package:user_app_yourspacekh/providers/language_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangeLanguageScreen extends StatelessWidget {
+  const ChangeLanguageScreen({Key? key}) : super(key: key);
+
   Widget _getLanguageTile(BuildContext context, Locale locale) {
     return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 20),
+      padding: const EdgeInsets.only(top: 20, bottom: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
               Container(
-                margin: EdgeInsets.only(right: 20),
+                margin: const EdgeInsets.only(right: 20),
                 height: 30,
                 width: 30,
                 child: Image.asset(
@@ -22,7 +24,7 @@ class ChangeLanguageScreen extends StatelessWidget {
               ),
               Text(
                 L10n.getLanguageName(locale.languageCode),
-                style: TextStyle(fontSize: 17),
+                style: const TextStyle(fontSize: 17),
               ),
             ],
           ),
@@ -30,7 +32,7 @@ class ChangeLanguageScreen extends StatelessWidget {
                       .locale
                       .toString() ==
                   locale.languageCode
-              ? Icon(
+              ? const Icon(
                   Icons.check,
                   color: Colors.blue,
                 )
@@ -51,7 +53,7 @@ class ChangeLanguageScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
@@ -59,15 +61,16 @@ class ChangeLanguageScreen extends StatelessWidget {
       ),
       body: Container(
           width: double.infinity,
-          margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+          margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
           child: Column(
             children: [
               Text(
                 AppLocalizations.of(context)!.change_language,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Column(
@@ -76,7 +79,7 @@ class ChangeLanguageScreen extends StatelessWidget {
                             onTap: () {
                               Provider.of<LanguageProvider>(context,
                                       listen: false)
-                                  .setLocale(new Locale(e.languageCode));
+                                  .setLocale(Locale(e.languageCode));
                             },
                             child: _getLanguageTile(context, e),
                           ))

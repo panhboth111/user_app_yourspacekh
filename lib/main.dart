@@ -22,7 +22,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => BottomCardProvider()),
       ChangeNotifierProvider(create: (_) => SpaceProvider()),
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 

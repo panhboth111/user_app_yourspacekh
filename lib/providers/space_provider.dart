@@ -4,22 +4,18 @@ import 'package:user_app_yourspacekh/services/space_service.dart';
 
 class SpaceProvider extends ChangeNotifier {
   final SpaceService _spaceService = SpaceService();
-  Set<SpaceModel> spaces = {};
+  Set<SpaceModel> _spaces = {};
+  Set<SpaceModel> get spaces => _spaces;
 
   initialize() async {
     try {
-      spaces = await _spaceService.getSpaces();
+      final response = await _spaceService.getSpaces();
+      if (response != null) {
+        _spaces = response;
+        notifyListeners();
+      }
     } catch (e) {
       rethrow;
     }
-  }
-
-  getSpaces() async {
-    try {
-      spaces = await _spaceService.getSpaces();
-    } catch (e) {
-      rethrow;
-    }
-    notifyListeners();
   }
 }

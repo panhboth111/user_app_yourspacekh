@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:user_app_yourspacekh/services/user_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -10,6 +11,8 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final UserService _userService = UserService();
+  //list of cities to choose from
   final List<String> _cities = [
     "Phnom Penh",
     "Battambang",
@@ -18,13 +21,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
     "Kompot",
     "Posat"
   ];
+  //text field controllers
   final TextEditingController _cityFieldController = TextEditingController();
+  final TextEditingController _plateNumberController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+
+  submitRegistration() async {
+    final userDetail = {
+      "plateNumber": {"cityId": 1, "plateNumber": _plateNumberController.text}
+    };
+    final response = await _userService.registerInformation(
+        _nameController.text, userDetail);
+    if (response['success']) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var appLocal = AppLocalizations.of(context);
     return Scaffold(
       body: SafeArea(
-          child: Container(
+          child: SizedBox(
         width: double.infinity,
         child: Column(
           children: [
@@ -66,9 +84,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Container(
                         margin: const EdgeInsets.only(top: 7),
                         height: 37,
-                        child: const TextField(
+                        child: TextField(
+                            controller: _nameController,
                             keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Colors.grey, width: 1.0),
@@ -101,9 +120,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: Container(
                             margin: const EdgeInsets.only(top: 7, right: 10),
                             height: 37,
-                            child: const TextField(
+                            child: TextField(
+                                controller: _plateNumberController,
                                 keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.grey, width: 1.0),
@@ -117,15 +137,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Container(
                     width: double.infinity,
                     height: 41,
-                    margin: EdgeInsets.only(top: 40),
+                    margin: const EdgeInsets.only(top: 40),
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Theme.of(context).primaryColor),
-                      child: const Text("Submit"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
+                        style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor),
+                        child: const Text("Submit"),
+                        onPressed: submitRegistration),
                   )
                 ],
               ),

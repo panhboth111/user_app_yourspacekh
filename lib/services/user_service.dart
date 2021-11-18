@@ -28,7 +28,6 @@ class UserService {
 
     if (response['success']) {
       prefs.setString('key', response['body']['key']);
-      print(prefs.getString('key'));
     }
     return response;
   }
@@ -39,13 +38,15 @@ class UserService {
     final response = await HttpRequest.postRequest(
         '/auth/verify', false, {'code': code, 'key': key, 'role': 'user'});
     if (response['success']) {
-      print(response['body']);
       prefs.setString('accessToken', response['body']['accessToken']);
       prefs.setString('refreshToken', response['body']['refreshToken']);
-      print(prefs.getString('accessToken'));
     }
     return response;
   }
 
-  registerInformation(String name, String city, String plateNumber) {}
+  registerInformation(String name, dynamic userDetail) async {
+    final response = await HttpRequest.patchRequest("/profile", true,
+        {"name": name, "language": "km", "userDetail": userDetail});
+    return response;
+  }
 }

@@ -18,13 +18,11 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
       TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _datePickerFieldController.dispose();
     _timePickerFieldController.dispose();
@@ -36,23 +34,24 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-          child: Container(
+          child: SizedBox(
         width: double.infinity,
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: const EdgeInsets.only(top: 50),
               child: Text(
-                "Basic Info",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+                appLocal!.basic_info,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
               ),
             ),
             Container(
-                margin: EdgeInsets.only(top: 20),
-                padding: EdgeInsets.all(20),
-                color: Color(0xffF0F2F4),
+                margin: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.all(20),
+                color: const Color(0xffF0F2F4),
                 child: Row(
-                  children: [
+                  children: const [
                     Icon(
                       Icons.car_repair,
                       color: Color(0xff79808F),
@@ -67,31 +66,31 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                   ],
                 )),
             Container(
-              margin: EdgeInsets.only(left: 20, right: 20, top: 40),
+              margin: const EdgeInsets.only(left: 20, right: 20, top: 40),
               child: Column(
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Space Name"),
+                      const Text("Space Name"),
                       Container(
-                        margin: EdgeInsets.only(top: 7),
+                        margin: const EdgeInsets.only(top: 7),
                         height: 37,
-                        child: TextField(),
+                        child: const TextField(),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Choose Preferred Date"),
-                            SizedBox(
+                            const Text("Choose Preferred Date"),
+                            const SizedBox(
                               height: 10,
                             ),
-                            Container(
+                            SizedBox(
                               height: 37,
                               child: Row(
                                 children: [
@@ -99,10 +98,7 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                                       child: DateTimeField(
                                           controller:
                                               _datePickerFieldController,
-                                          onChanged: (value) {
-                                            print(_datePickerFieldController
-                                                .text);
-                                          },
+                                          onChanged: (value) {},
                                           format: DateFormat("yyyy-MM-dd"),
                                           onShowPicker:
                                               (context, currentValue) {
@@ -112,7 +108,7 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                                                 firstDate: DateTime(2000),
                                                 lastDate: (DateTime(2022)));
                                           })),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   Flexible(
@@ -136,41 +132,39 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                             const SizedBox(
                               height: 100,
                             ),
-                            Container(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          elevation: 0,
-                                          primary: Colors.white,
-                                          side: BorderSide(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              width: 1.5)),
-                                      onPressed: () {},
-                                      child: Text(
-                                        "Cancel",
-                                        style: TextStyle(
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        primary: Colors.white,
+                                        side: BorderSide(
                                             color:
-                                                Theme.of(context).primaryColor),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary:
+                                                Theme.of(context).primaryColor,
+                                            width: 1.5)),
+                                    onPressed: () {},
+                                    child: Text(
+                                      "Cancel",
+                                      style: TextStyle(
+                                          color:
                                               Theme.of(context).primaryColor),
-                                      child: Text("Confirm Booking"),
-                                      onPressed: () {},
                                     ),
-                                  )
-                                ],
-                              ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary:
+                                            Theme.of(context).primaryColor),
+                                    child: const Text("Confirm Booking"),
+                                    onPressed: () {},
+                                  ),
+                                )
+                              ],
                             )
                             // Container(
                             //   width: double.infinity,
