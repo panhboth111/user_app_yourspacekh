@@ -29,6 +29,7 @@ class _MapUIState extends State<MapUI> {
   double? _currentHeading;
 
   final Completer<GoogleMapController> _controller = Completer();
+  late StreamSubscription<Position>? _geolocatorStream;
   late GoogleMapController _mapController;
 
   int _selectedSpaceId = -1;
@@ -140,6 +141,8 @@ class _MapUIState extends State<MapUI> {
   void dispose() {
     super.dispose();
     _mapController.dispose();
+    _geolocatorStream?.cancel();
+    _geolocatorStream = null;
   }
 
   Marker _buildLocationMarker() {
