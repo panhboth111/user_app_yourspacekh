@@ -47,13 +47,10 @@ class _MapUIState extends State<MapUI> {
         icon:
             _selectedSpaceId == space.id ? _selectedMarkerIcon! : _markerIcon!,
         onTap: () {
-<<<<<<< HEAD
           Provider.of<BottomCardProvider>(context, listen: false)
               .setBottomCardType(1);
           Provider.of<SpaceProvider>(context, listen: false)
               .setActiveSpace(space);
-=======
->>>>>>> 9af809bf4ab422c0cb0096681f2dfea04fc38e44
           setState(() {
             _selectedSpaceId = space.id;
           });
