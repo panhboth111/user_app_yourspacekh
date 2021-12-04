@@ -30,6 +30,7 @@ class _MapUIState extends State<MapUI> {
   double? _currentHeading;
 
   final Completer<GoogleMapController> _controller = Completer();
+  late StreamSubscription<Position>? _geolocatorStream;
   late GoogleMapController _mapController;
 
   int _selectedSpaceId = -1;
@@ -46,10 +47,13 @@ class _MapUIState extends State<MapUI> {
         icon:
             _selectedSpaceId == space.id ? _selectedMarkerIcon! : _markerIcon!,
         onTap: () {
+<<<<<<< HEAD
           Provider.of<BottomCardProvider>(context, listen: false)
               .setBottomCardType(1);
           Provider.of<SpaceProvider>(context, listen: false)
               .setActiveSpace(space);
+=======
+>>>>>>> 9af809bf4ab422c0cb0096681f2dfea04fc38e44
           setState(() {
             _selectedSpaceId = space.id;
           });
@@ -145,12 +149,14 @@ class _MapUIState extends State<MapUI> {
   void dispose() {
     super.dispose();
     _mapController.dispose();
+    _geolocatorStream?.cancel();
+    _geolocatorStream = null;
   }
 
   Marker _buildLocationMarker() {
     return Marker(
         markerId: const MarkerId("myLocation"),
-        anchor: const ui.Offset(0.5, 0.5),
+        anchor: const ui.Offset(0.5, 0.560546875),
         icon: _currentLocationIcon!,
         position: _currentLocation!,
         rotation: _currentHeading!);
