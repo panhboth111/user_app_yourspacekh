@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/models/space_model.dart';
@@ -16,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   SpaceService spaceService = SpaceService();
-
+  late FirebaseMessaging messaging;
   void onMarkerTap(SpaceModel spaceModel) {}
 
   @override
@@ -24,6 +25,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     Provider.of<SpaceProvider>(context, listen: false).initialize();
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value){
+      print("token");
+        print(value);
+    });
   }
 
   @override

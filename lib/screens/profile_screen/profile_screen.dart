@@ -8,10 +8,11 @@ import 'package:user_app_yourspacekh/screens/profile_screen/parking_history.dart
 import 'package:user_app_yourspacekh/screens/profile_screen/edit_profile_screen.dart';
 import 'package:user_app_yourspacekh/screens/profile_screen/terms_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:user_app_yourspacekh/services/user_service.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
-
+   ProfileScreen({Key? key}) : super(key: key);
+  final UserService _userService =  UserService();
   Widget _getHomeAction(
       BuildContext context, String title, IconData icon, Widget screen) {
     return Container(
@@ -100,12 +101,17 @@ class ProfileScreen extends StatelessWidget {
                           Navigator.pop(context);
                         }),
                   ),
-                  SizedBox(
+                 SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(primary: Colors.red),
                         child: Text(appLocal.logout),
-                        onPressed: () {}),
+                        onPressed: () async {
+                          await _userService.logout();
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .logout();
+                          Navigator.of(context).pop();
+                        }),
                   )
                 ],
               ),

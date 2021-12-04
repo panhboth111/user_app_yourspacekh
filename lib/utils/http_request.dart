@@ -71,7 +71,6 @@ class HttpRequest {
         };
       }
       accessToken = prefs.getString("accessToken")!;
-      print(accessToken);
     }
 
     final url = Uri.parse(baseURL + endPoint);

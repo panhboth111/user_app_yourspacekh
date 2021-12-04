@@ -5,6 +5,7 @@ class BottomCardProvider extends ChangeNotifier {
   int get bottomCardType => _bottomCardType;
 
   void setBottomCardType(int type) {
+    print("bottom");
     _bottomCardType = type;
     notifyListeners();
   }

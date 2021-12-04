@@ -13,6 +13,12 @@ class SpaceModel {
       required this.closeTime,
       required this.coordinate});
   factory SpaceModel.fromJson(Map<String, dynamic> json) {
+    double lat = json['coordinate']['x'].runtimeType == int
+        ? json['coordinate']['x'].toDouble()
+        : json['coordinate']['x'];
+    double lng = json['coordinate']['y'].runtimeType == int
+        ? json['coordinate']['y'].toDouble()
+        : json['coordinate']['y'];
     return SpaceModel(
         id: json['id'],
         name: json['name'],
@@ -20,6 +26,6 @@ class SpaceModel {
         address: json["address"],
         openTime: json["openTime"],
         closeTime: json["closeTime"],
-        coordinate: LatLng(json['coordinate']['x'], json['coordinate']['y']));
+        coordinate: LatLng(lat, lng));
   }
 }

@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/models/space_model.dart';
+import 'package:user_app_yourspacekh/providers/bottom_card_provider.dart';
 import 'package:user_app_yourspacekh/providers/space_provider.dart';
 
 class MapUI extends StatefulWidget {
@@ -45,7 +46,10 @@ class _MapUIState extends State<MapUI> {
         icon:
             _selectedSpaceId == space.id ? _selectedMarkerIcon! : _markerIcon!,
         onTap: () {
-          print("tapped");
+          Provider.of<BottomCardProvider>(context, listen: false)
+              .setBottomCardType(1);
+          Provider.of<SpaceProvider>(context, listen: false)
+              .setActiveSpace(space);
           setState(() {
             _selectedSpaceId = space.id;
           });

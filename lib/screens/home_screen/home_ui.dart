@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/models/space_model.dart';
 import 'package:user_app_yourspacekh/providers/auth_provider.dart';
 import 'package:user_app_yourspacekh/providers/bottom_card_provider.dart';
+import 'package:user_app_yourspacekh/providers/space_provider.dart';
 import 'package:user_app_yourspacekh/screens/booking_screen/confirm_booking_screen.dart';
 import 'package:user_app_yourspacekh/screens/login_screen/login_screen.dart';
 import 'package:user_app_yourspacekh/screens/profile_screen/profile_screen.dart';
@@ -131,8 +132,9 @@ class HomeUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<BottomCardProvider>(
-        builder: (consumerContext, model, child) {
+    return Consumer2<BottomCardProvider, SpaceProvider>(
+        builder: (consumerContext, bottomCardModel, spaceModel, child) {
+      print(activeSpace != null);
       return Container(
           margin: const EdgeInsets.only(left: 15, right: 15, top: 30),
           child: Column(
@@ -173,7 +175,7 @@ class HomeUI extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const ProfileScreen()));
+                                builder: (context) =>  ProfileScreen()));
                       }
                     },
                     child: const Icon(Icons.person, color: Colors.black),
@@ -203,9 +205,12 @@ class HomeUI extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    model.bottomCardType != 0 && activeSpace != null
+                    bottomCardModel.bottomCardType != 0 &&
+                            spaceModel.activeSpace != null
                         ? _getBottomCardContainer(
-                            context, model.bottomCardType, activeSpace!)
+                            context,
+                            bottomCardModel.bottomCardType,
+                            spaceModel.activeSpace!)
                         : Container()
                   ],
                 ),

@@ -49,4 +49,9 @@ class UserService {
         {"name": name, "language": "km", "userDetail": userDetail});
     return response;
   }
+  logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('accessToken', "");
+    prefs.setString('refreshToken', "");
+  }
 }

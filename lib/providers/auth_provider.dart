@@ -16,4 +16,8 @@ class AuthProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+  logout() {
+    _authStatus = 0;
+    notifyListeners();
+  }
 }

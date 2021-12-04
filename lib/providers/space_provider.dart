@@ -6,6 +6,13 @@ class SpaceProvider extends ChangeNotifier {
   final SpaceService _spaceService = SpaceService();
   Set<SpaceModel> _spaces = {};
   Set<SpaceModel> get spaces => _spaces;
+  SpaceModel? _activeSpace;
+  SpaceModel? get activeSpace => _activeSpace;
+
+  setActiveSpace(SpaceModel space) {
+    _activeSpace = space;
+    notifyListeners();
+  }
 
   initialize() async {
     try {
