@@ -9,13 +9,26 @@ class AuthProvider extends ChangeNotifier {
 
   initialize(UserModel? user) async {
     _user = user;
+
     if (user!.name == null && user.phoneNumber != null) {
       _authStatus = 1;
+      print("here");
     } else if (user.name!.isNotEmpty && user.phoneNumber!.isNotEmpty) {
+      print("here2");
       _authStatus = 2;
     }
     notifyListeners();
   }
+
+  setAuth(int authStatus) {
+    _authStatus = authStatus;
+    notifyListeners();
+  }
+
+  reload() {
+    notifyListeners();
+  }
+
   logout() {
     _authStatus = 0;
     notifyListeners();

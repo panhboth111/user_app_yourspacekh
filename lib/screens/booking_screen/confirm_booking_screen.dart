@@ -2,20 +2,46 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:user_app_yourspacekh/models/parking_model.dart';
+import 'package:user_app_yourspacekh/models/space_model.dart';
+import 'package:user_app_yourspacekh/services/parking_service.dart';
+import 'package:user_app_yourspacekh/services/space_service.dart';
 
 class ConfirmBookingScreen extends StatefulWidget {
-  const ConfirmBookingScreen({Key? key}) : super(key: key);
+  final SpaceModel? activeSpace;
+  const ConfirmBookingScreen({Key? key, this.activeSpace}) : super(key: key);
 
   @override
   State<ConfirmBookingScreen> createState() => _ConfirmBookingScreenState();
 }
 
 class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
-  late DateTime selectedDate;
+  ParkingService _parkingService = ParkingService();
+  DateTime selectedDate = DateTime.now();
+  DateTime firstDate = DateTime.now();
+  DateTime lastDate = DateTime(2022);
   final TextEditingController _datePickerFieldController =
       TextEditingController();
   final TextEditingController _timePickerFieldController =
       TextEditingController();
+
+  createParking() async {
+    String preferredDate = _datePickerFieldController.text +
+        "T" +
+        _timePickerFieldController.text.split(" ")[0];
+    print(preferredDate);
+    ParkingModel parking = ParkingModel(
+        spaceId: widget.activeSpace!.id.toString(),
+        preferredDate: "2021-10-27T16:25:36.306Z",
+        interval: "DAILY");
+    var response = await _parkingService.createParking(parking);
+    if (response['success']) {
+      _datePickerFieldController.dispose();
+      _timePickerFieldController.dispose();
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -26,6 +52,19 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
     super.dispose();
     _datePickerFieldController.dispose();
     _timePickerFieldController.dispose();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: firstDate,
+        lastDate: lastDate);
+    if (picked != null) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
   }
 
   @override
@@ -72,11 +111,15 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Space Name"),
+                      const Text("space name"),
                       Container(
                         margin: const EdgeInsets.only(top: 7),
                         height: 37,
-                        child: const TextField(),
+                        child: TextField(
+                          enabled: false,
+                          controller: TextEditingController(
+                              text: widget.activeSpace!.name),
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -143,7 +186,9 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                                             color:
                                                 Theme.of(context).primaryColor,
                                             width: 1.5)),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
                                     child: Text(
                                       "Cancel",
                                       style: TextStyle(
@@ -161,7 +206,7 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                                         primary:
                                             Theme.of(context).primaryColor),
                                     child: const Text("Confirm Booking"),
-                                    onPressed: () {},
+                                    onPressed: createParking,
                                   ),
                                 )
                               ],

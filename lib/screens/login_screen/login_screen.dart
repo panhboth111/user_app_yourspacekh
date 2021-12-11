@@ -22,11 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _pinBtnEnabled = false;
 
   void _onSubmitPhone() async {
-    setState(() {
-      _loginStage = 1;
-      errorMsg = "";
-    });
     final response = await _userService.login(_phoneController.text);
+
     if (!response['success']) {
       setState(() {
         errorMsg = response["errors"].toString();
@@ -224,23 +221,24 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: _loginStage != 0
-            ? IconButton(
-                onPressed: () {
-                  setState(() {
-                    _loginStage = 0;
-                    errorMsg = "";
-                  });
-                },
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
-                ),
-              )
-            : null,
-      ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            onPressed: () {
+              if (_loginStage == 0) {
+                Navigator.pop(context);
+                return;
+              }
+              setState(() {
+                _loginStage = 0;
+                errorMsg = "";
+              });
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+          )),
       body: SafeArea(
         child: Container(
             width: double.infinity,

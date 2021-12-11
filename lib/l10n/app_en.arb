@@ -19,5 +19,12 @@
     "look_for_space":"Start Looking for Space",
     "basic_info":"Basic Info",
     "basic_info_desc":"We take privacy issues seriously. You can be sure that your data is securely protected.",
-    "vehicle_number":"Vehicle Number"
+    "vehicle_number":"Vehicle Number",
+    "space_connecting":"Your Space is connecting the space owner",
+    "please_wait":"Please wait :)",
+    "contact_us":"Contact Us",
+    "currently_reserving":"You're currently reserving a spot at",
+    "cancel_booking":"Cancel Booking",
+    "cancel_desc":"We already connected you to our partner. They would be sad if you cancelled it.",
+    "currently_parking":"You are currently parking at"
 }

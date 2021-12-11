@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 
-class BottomCardProvider extends ChangeNotifier {
+class ParkingProvider extends ChangeNotifier {
   int _bottomCardType = 0;
   int get bottomCardType => _bottomCardType;
 
   void setBottomCardType(int type) {
-    print("bottom");
     _bottomCardType = type;
+
     notifyListeners();
   }
 }

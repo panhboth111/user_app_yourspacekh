@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:user_app_yourspacekh/models/city_model.dart';
 import 'package:user_app_yourspacekh/models/user_model.dart';
 import 'package:user_app_yourspacekh/utils/http_request.dart';
 
@@ -13,12 +14,30 @@ class UserService {
     return UserModel.fromJson(json);
   }
 
+  Set<CityModel> _parseCityModel(dynamic resBody) {
+    return resBody.map<CityModel>((json) => CityModel.fromJson(json)).toSet();
+  }
+
   Future<UserModel?> getUserInformation() async {
     var response = await HttpRequest.getRequest('/profile', true);
-
     return response['success']
         ? _parseUserModel(response['body']['data'])
         : UserModel(id: null, name: null, phoneNumber: null, language: "km");
+  }
+
+  getCities() async {
+    try {
+      final response = await HttpRequest.getRequest("/cities", true);
+
+      if (response['success']) {
+        var result = _parseCityModel(response['body']['data']);
+
+        return result.toList();
+      }
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
   }
 
   login(String phoneNumber) async {
@@ -47,8 +66,24 @@ class UserService {
   registerInformation(String name, dynamic userDetail) async {
     final response = await HttpRequest.patchRequest("/profile", true,
         {"name": name, "language": "km", "userDetail": userDetail});
+
     return response;
   }
+
+  addToken(String fcmToken, String deviceId) async {
+    final response = await HttpRequest.putRequest(
+        "/devices", true, {"fcmToken": fcmToken, "deviceId": deviceId});
+
+    print(response);
+  }
+
+  updateUserProfile(String name, String language) async {
+    final response = await HttpRequest.patchRequest(
+        "/profile", true, {"name": name, "language": language});
+
+    return response;
+  }
+
   logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('accessToken', "");

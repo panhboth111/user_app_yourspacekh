@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/providers/auth_provider.dart';
+import 'package:user_app_yourspacekh/screens/home_screen/home_screen.dart';
 import 'package:user_app_yourspacekh/screens/profile_screen/change_language_screen.dart';
 
 import 'package:user_app_yourspacekh/screens/profile_screen/faq_screen.dart';
@@ -11,8 +12,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:user_app_yourspacekh/services/user_service.dart';
 
 class ProfileScreen extends StatelessWidget {
-   ProfileScreen({Key? key}) : super(key: key);
-  final UserService _userService =  UserService();
+  ProfileScreen({Key? key}) : super(key: key);
+  final UserService _userService = UserService();
   Widget _getHomeAction(
       BuildContext context, String title, IconData icon, Widget screen) {
     return Container(
@@ -101,7 +102,7 @@ class ProfileScreen extends StatelessWidget {
                           Navigator.pop(context);
                         }),
                   ),
-                 SizedBox(
+                  SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(primary: Colors.red),
@@ -110,7 +111,12 @@ class ProfileScreen extends StatelessWidget {
                           await _userService.logout();
                           Provider.of<AuthProvider>(context, listen: false)
                               .logout();
-                          Navigator.of(context).pop();
+                          Navigator.pushReplacement<void, void>(
+                            context,
+                            MaterialPageRoute<void>(
+                                builder: (BuildContext context) =>
+                                    const HomeScreen()),
+                          );
                         }),
                   )
                 ],

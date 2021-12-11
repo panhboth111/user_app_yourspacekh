@@ -9,7 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/models/space_model.dart';
-import 'package:user_app_yourspacekh/providers/bottom_card_provider.dart';
+import 'package:user_app_yourspacekh/providers/parking_provider.dart';
 import 'package:user_app_yourspacekh/providers/space_provider.dart';
 
 class MapUI extends StatefulWidget {
@@ -47,7 +47,7 @@ class _MapUIState extends State<MapUI> {
         icon:
             _selectedSpaceId == space.id ? _selectedMarkerIcon! : _markerIcon!,
         onTap: () {
-          Provider.of<BottomCardProvider>(context, listen: false)
+          Provider.of<ParkingProvider>(context, listen: false)
               .setBottomCardType(1);
           Provider.of<SpaceProvider>(context, listen: false)
               .setActiveSpace(space);
@@ -55,7 +55,7 @@ class _MapUIState extends State<MapUI> {
             _selectedSpaceId = space.id;
           });
           _mapController.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: space.coordinate, zoom: 14)));
+              CameraPosition(target: space.coordinate, zoom: 20)));
           widget.onMarkerTap(space);
         },
       ));
@@ -76,11 +76,11 @@ class _MapUIState extends State<MapUI> {
 
   void _loadMarker() async {
     _markerIcon = BitmapDescriptor.fromBytes(
-        await _getBytesFromAsset('assets/images/normalMarker.png', 60));
+        await _getBytesFromAsset('assets/images/normalMarker.png', 90));
     _selectedMarkerIcon = BitmapDescriptor.fromBytes(
-        await _getBytesFromAsset('assets/images/selectedMarker.png', 90));
+        await _getBytesFromAsset('assets/images/selectedMarker.png', 110));
     _currentLocationIcon = BitmapDescriptor.fromBytes(
-        await _getBytesFromAsset('assets/images/current_location.png', 90));
+        await _getBytesFromAsset('assets/images/current_location.png', 110));
   }
 
   Future<void> _checkLocationPermission() async {
@@ -171,7 +171,7 @@ class _MapUIState extends State<MapUI> {
             future: _getUserLocation(),
             builder: (ctx, AsyncSnapshot<Position> snapshot) {
               if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               }
               return GoogleMap(
                   markers: <Marker>{
@@ -183,13 +183,13 @@ class _MapUIState extends State<MapUI> {
                   myLocationEnabled: false,
                   onMapCreated: _onMapCreated,
                   initialCameraPosition: CameraPosition(
-                      zoom: 15,
+                      zoom: 20,
                       target: LatLng(
                           snapshot.data!.latitude, snapshot.data!.longitude)));
             });
       });
     } else {
-      return const CircularProgressIndicator();
+      return const Center(child: CircularProgressIndicator());
     }
   }
 }

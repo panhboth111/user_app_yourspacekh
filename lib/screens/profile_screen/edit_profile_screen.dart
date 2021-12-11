@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/models/user_model.dart';
 import 'package:user_app_yourspacekh/providers/auth_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:user_app_yourspacekh/services/user_service.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  UserModel? user;
+  UserService _userService = UserService();
   final TextEditingController _nameController = TextEditingController();
 
   final TextEditingController _phoneController = TextEditingController();
@@ -42,13 +45,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
+  _submitEditProfile() async {
+    var response = await _userService.updateUserProfile(
+        _nameController.text, user!.language!);
+    if (response['success']) {
+      if (mounted) {
+        _userService.getUserInformation().then((value) =>
+            Provider.of<AuthProvider>(context, listen: false)
+                .initialize(value));
+
+        Navigator.pop(context);
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    UserModel user = Provider.of<AuthProvider>(context, listen: false).user!;
-    _nameController.text = user.name!;
-    _phoneController.text = user.phoneNumber!;
-    _telegramController.text = user.phoneNumber!;
+    setState(() {
+      user = Provider.of<AuthProvider>(context, listen: false).user!;
+      _nameController.text = user!.name!;
+      _phoneController.text = user!.phoneNumber!;
+      _telegramController.text = user!.phoneNumber!;
+    });
   }
 
   @override
@@ -97,9 +116,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).primaryColor),
                   child: const Text("Update"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
+                  onPressed: _submitEditProfile),
             ),
           ],
         ),
