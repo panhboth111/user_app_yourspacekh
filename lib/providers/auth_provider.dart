@@ -12,9 +12,7 @@ class AuthProvider extends ChangeNotifier {
 
     if (user!.name == null && user.phoneNumber != null) {
       _authStatus = 1;
-      print("here");
     } else if (user.name!.isNotEmpty && user.phoneNumber!.isNotEmpty) {
-      print("here2");
       _authStatus = 2;
     }
     notifyListeners();

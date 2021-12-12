@@ -11,10 +11,11 @@ import 'package:user_app_yourspacekh/screens/booking_screen/confirm_booking_scre
 import 'package:user_app_yourspacekh/screens/login_screen/login_screen.dart';
 import 'package:user_app_yourspacekh/screens/profile_screen/profile_screen.dart';
 import 'package:user_app_yourspacekh/screens/register_screen/register_screen.dart';
+import 'package:user_app_yourspacekh/services/parking_service.dart';
 
 class HomeUI extends StatelessWidget {
   final currentLocation;
-
+  ParkingService _parkingService = ParkingService();
   late SpaceModel? activeSpace;
 
   HomeUI({Key? key, this.currentLocation, this.activeSpace}) : super(key: key);
@@ -84,8 +85,15 @@ class HomeUI extends StatelessWidget {
                             style: TextStyle(color: Color(0xff575F6E))),
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
+                        onPressed: () async {
+                          var response = await _parkingService.cancelParking(
+                              Provider.of<ParkingProvider>(context,
+                                      listen: false)
+                                  .currentParking!
+                                  .id!);
+                          if (response) {
+                            Navigator.pop(context);
+                          }
                         },
                         child: Text("Cancel"),
                         style: ElevatedButton.styleFrom(
@@ -107,6 +115,7 @@ class HomeUI extends StatelessWidget {
   Widget _getBottomCardContainer(
       BuildContext context, int bottomCardType, SpaceModel? activeSpace) {
     var appLocal = AppLocalizations.of(context);
+
     switch (bottomCardType) {
       case 1:
         return SizedBox(
@@ -123,15 +132,15 @@ class HomeUI extends StatelessWidget {
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
-                            "activeSpace.name",
-                            style: TextStyle(
+                            activeSpace!.name,
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 20),
                           ),
                           Text(
-                            "№ 101, St. 254",
-                            style: TextStyle(
+                            activeSpace.address,
+                            style: const TextStyle(
                                 fontSize: 14, color: Color(0xff7f7f7f)),
                           )
                         ],
@@ -183,7 +192,7 @@ class HomeUI extends StatelessWidget {
                               const SizedBox(
                                 width: 4,
                               ),
-                              Text("Price: " + activeSpace!.price),
+                              Text("Price: " + activeSpace.price),
                             ],
                           ),
                         ],
@@ -257,7 +266,7 @@ class HomeUI extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Text("Mit pheap parking",
+                  Text(activeSpace!.name,
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   const SizedBox(
@@ -270,6 +279,7 @@ class HomeUI extends StatelessWidget {
                             width: 2, color: Theme.of(context).primaryColor),
                         padding: const EdgeInsets.only(left: 30, right: 30)),
                     onPressed: () {
+                      // _parkingService.cancelParking();
                       onCancelBookingPressed(context);
                     },
                     child: Text(
@@ -300,7 +310,7 @@ class HomeUI extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Text("Mit pheap parking",
+                  Text(activeSpace!.name,
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   const SizedBox(
@@ -403,19 +413,19 @@ class HomeUI extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    bottomCardModel.bottomCardType != 0
-                        ? _getBottomCardContainer(
-                            context,
-                            bottomCardModel.bottomCardType,
-                            spaceModel.activeSpace)
-                        : Container()
-                    // bottomCardModel.bottomCardType != 0 &&
-                    //         spaceModel.activeSpace != null
+                    // bottomCardModel.bottomCardType != 0
                     //     ? _getBottomCardContainer(
                     //         context,
                     //         bottomCardModel.bottomCardType,
-                    //         spaceModel.activeSpace!)
+                    //         spaceModel.activeSpace)
                     //     : Container()
+                    bottomCardModel.bottomCardType != 0 &&
+                            spaceModel.activeSpace != null
+                        ? _getBottomCardContainer(
+                            context,
+                            bottomCardModel.bottomCardType,
+                            spaceModel.activeSpace!)
+                        : Container()
                   ],
                 ),
               )

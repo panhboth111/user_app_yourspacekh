@@ -31,7 +31,6 @@ class HttpRequest {
 
       final response = await http.post(url,
           headers: headers, body: convert.jsonEncode(requestBody));
-      print(response.body);
       if (response.statusCode == 401) {
         final res = await _handleRefreshToken(refreshToken);
         if (res['success']) {
@@ -177,7 +176,7 @@ class HttpRequest {
 
       final response = await http.put(url,
           headers: headers, body: convert.jsonEncode(requestBody));
-
+      print(response.body);
       if (response.statusCode == 401) {
         final res = await _handleRefreshToken(refreshToken);
         if (res['success']) {

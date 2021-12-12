@@ -41,12 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   parkingCompletedDialog(BuildContext context) {
+    SpaceProvider spaceProvider =
+        Provider.of<SpaceProvider>(context, listen: false);
     return showDialog(
         context: context,
         builder: (context) {
           return Dialog(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             elevation: 16,
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.65,
@@ -65,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                        Text("30.00",
+                        Text(spaceProvider.activeSpace!.price,
                             style: TextStyle(
                                 fontSize: 36,
                                 color: Theme.of(context).primaryColor)),
@@ -97,8 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   _getReceiptText(
                                       "Transaction Number", "#11012013010"),
-                                  _getReceiptText(
-                                      "Parking Lot", "Mitpheap Parking"),
+                                  _getReceiptText("Parking Lot",
+                                      spaceProvider.activeSpace!.name),
                                 ],
                               ),
                               Column(
@@ -131,6 +133,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             primary: Theme.of(context).primaryColor,
                           ),
                           onPressed: () {
+                            Provider.of<ParkingProvider>(context, listen: false)
+                                .setBottomCardType(0);
                             Navigator.pop(context);
                           },
                           child: Text("Leave Feedback")),
@@ -139,6 +143,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: ElevatedButton(
                         onPressed: () {
+                          Provider.of<ParkingProvider>(context, listen: false)
+                              .setBottomCardType(0);
                           Navigator.pop(context);
                         },
                         child: Text(
@@ -179,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  showNotification(BuildContext context, RemoteMessage msg) {
+  showNotification(BuildContext context, String title, String body) {
     return showDialog(
         context: context,
         builder: (context) {
@@ -194,13 +200,13 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(msg.notification!.title!,
+                  Text(title,
                       style: const TextStyle(
                           fontSize: 35, fontWeight: FontWeight.bold)),
                   const SizedBox(
                     height: 20,
                   ),
-                  Text(msg.notification!.body!, style: TextStyle(fontSize: 14)),
+                  Text(body, style: TextStyle(fontSize: 14)),
                   const SizedBox(
                     height: 20,
                   ),
@@ -221,10 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
-  Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    print(message.notification?.title);
-    print("Handling a background message: ${message.messageId}");
-  }
+  Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
 
   @override
   void initState() {
@@ -237,31 +240,33 @@ class _HomeScreenState extends State<HomeScreen> {
       _userService.addToken(value!, await _getDeviceId());
     });
     FirebaseMessaging.onMessage.listen((msg) {
-      print(msg.notification?.title);
-      print(msg.notification?.body);
-      print(msg.data);
-      // showNotification(context, msg);
-      // if (msg.data['event'] == 'accepted') {
-      //   Provider.of<ParkingProvider>(context, listen: false)
-      //       .setBottomCardType(3);
-      // } else if (msg.data['event'] == 'parking') {
-      //   Provider.of<ParkingProvider>(context, listen: false)
-      //       .setBottomCardType(3);
-      // } else if (msg.data['event'] == 'done') {
-      //   parkingCompletedDialog(context);
-      // }
+      if (msg.data['event'] == 'accepted') {
+        showNotification(
+            context, msg.notification!.title!, msg.notification!.body!);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(3);
+      } else if (msg.data['event'] == 'parking') {
+        showNotification(context, "Request Accepted", "You are now parking");
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(4);
+      } else if (msg.data['event'] == 'done') {
+        parkingCompletedDialog(context);
+      }
     });
     FirebaseMessaging.onBackgroundMessage(
         (message) => _firebaseMessagingBackgroundHandler(message));
     FirebaseMessaging.onMessageOpenedApp.listen((msg) {
-      showNotification(context, msg);
+      showNotification(
+          context, msg.notification!.title!, msg.notification!.body!);
       if (msg.data['event'] == 'accepted') {
         Provider.of<ParkingProvider>(context, listen: false)
             .setBottomCardType(3);
       } else if (msg.data['event'] == 'parking') {
+        showNotification(context, "Request Accepted", "You are now parking");
         Provider.of<ParkingProvider>(context, listen: false)
-            .setBottomCardType(3);
+            .setBottomCardType(5);
       } else if (msg.data['event'] == 'done') {
+        print(msg.data);
         parkingCompletedDialog(context);
       }
     });

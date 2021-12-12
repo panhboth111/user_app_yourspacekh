@@ -73,8 +73,6 @@ class UserService {
   addToken(String fcmToken, String deviceId) async {
     final response = await HttpRequest.putRequest(
         "/devices", true, {"fcmToken": fcmToken, "deviceId": deviceId});
-
-    print(response);
   }
 
   updateUserProfile(String name, String language) async {

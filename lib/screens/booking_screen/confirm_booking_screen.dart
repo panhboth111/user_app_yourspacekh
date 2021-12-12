@@ -2,8 +2,10 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/models/parking_model.dart';
 import 'package:user_app_yourspacekh/models/space_model.dart';
+import 'package:user_app_yourspacekh/providers/parking_provider.dart';
 import 'package:user_app_yourspacekh/services/parking_service.dart';
 import 'package:user_app_yourspacekh/services/space_service.dart';
 
@@ -20,6 +22,7 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
   DateTime selectedDate = DateTime.now();
   DateTime firstDate = DateTime.now();
   DateTime lastDate = DateTime(2022);
+  String errorMsg = "";
   final TextEditingController _datePickerFieldController =
       TextEditingController();
   final TextEditingController _timePickerFieldController =
@@ -29,17 +32,19 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
     String preferredDate = _datePickerFieldController.text +
         "T" +
         _timePickerFieldController.text.split(" ")[0];
-    print(preferredDate);
     ParkingModel parking = ParkingModel(
         spaceId: widget.activeSpace!.id.toString(),
-        preferredDate: "2021-10-27T16:25:36.306Z",
+        preferredDate: preferredDate,
         interval: "DAILY");
     var response = await _parkingService.createParking(parking);
+
     if (response['success']) {
-      _datePickerFieldController.dispose();
-      _timePickerFieldController.dispose();
       Navigator.pop(context);
+      Provider.of<ParkingProvider>(context, listen: false).setBottomCardType(2);
     }
+    setState(() {
+      errorMsg = response['errors'].toString();
+    });
   }
 
   @override
@@ -173,8 +178,16 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                               ),
                             ),
                             const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              errorMsg,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                            const SizedBox(
                               height: 100,
                             ),
+
                             Row(
                               children: [
                                 Expanded(
@@ -210,7 +223,8 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                                   ),
                                 )
                               ],
-                            )
+                            ),
+
                             // Container(
                             //   width: double.infinity,
                             //   height: 37,

@@ -47,13 +47,17 @@ class _MapUIState extends State<MapUI> {
         icon:
             _selectedSpaceId == space.id ? _selectedMarkerIcon! : _markerIcon!,
         onTap: () {
-          Provider.of<ParkingProvider>(context, listen: false)
-              .setBottomCardType(1);
-          Provider.of<SpaceProvider>(context, listen: false)
-              .setActiveSpace(space);
-          setState(() {
-            _selectedSpaceId = space.id;
-          });
+          if (Provider.of<ParkingProvider>(context, listen: false)
+                  .bottomCardType ==
+              0) {
+            Provider.of<ParkingProvider>(context, listen: false)
+                .setBottomCardType(1);
+            Provider.of<SpaceProvider>(context, listen: false)
+                .setActiveSpace(space);
+            setState(() {
+              _selectedSpaceId = space.id;
+            });
+          }
           _mapController.animateCamera(CameraUpdate.newCameraPosition(
               CameraPosition(target: space.coordinate, zoom: 20)));
           widget.onMarkerTap(space);

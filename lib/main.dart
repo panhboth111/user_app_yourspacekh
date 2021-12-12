@@ -1,8 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/l10n/l10n.dart';
+import 'package:user_app_yourspacekh/models/parking_model.dart';
+import 'package:user_app_yourspacekh/models/space_model.dart';
 import 'package:user_app_yourspacekh/providers/auth_provider.dart';
 import 'package:user_app_yourspacekh/providers/parking_provider.dart';
 import 'package:user_app_yourspacekh/providers/language_provider.dart';
@@ -50,11 +53,67 @@ class _MyAppState extends State<MyApp> {
                 .user!
                 .language!)));
     parkingService.getCurrentParking().then((response) {
-      print(response);
-      // if (response['body']['data'].length == 0) {
-      //   Provider.of<ParkingProvider>(context, listen: false)
-      //       .setBottomCardType(0);
-      // }
+      var responseBodyData = response['body']['data'];
+      print(responseBodyData);
+      if (responseBodyData.length == 0) {
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(0);
+      } else if (responseBodyData[0]['status'] == 'BOOKING') {
+        SpaceModel space = SpaceModel(
+            id: responseBodyData[0]['space']['id'],
+            name: responseBodyData[0]['space']['name'],
+            price: responseBodyData[0]['space']['price'],
+            address: responseBodyData[0]['space']['address'],
+            openTime: responseBodyData[0]['space']['openTime'],
+            closeTime: responseBodyData[0]['space']['closeTime'],
+            coordinate: LatLng(responseBodyData[0]['space']['coordinate']['x'],
+                responseBodyData[0]['space']['coordinate']['y']));
+        ParkingModel parking = ParkingModel(
+            id: responseBodyData[0]['id'].toString(),
+            spaceId: responseBodyData[0]['spaceId'].toString());
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setCurrentParking(parking);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(2);
+      } else if (responseBodyData[0]['status'] == 'ACCEPTED') {
+        SpaceModel space = SpaceModel(
+            id: responseBodyData[0]['space']['id'],
+            name: responseBodyData[0]['space']['name'],
+            price: responseBodyData[0]['space']['price'],
+            address: responseBodyData[0]['space']['address'],
+            openTime: responseBodyData[0]['space']['openTime'],
+            closeTime: responseBodyData[0]['space']['closeTime'],
+            coordinate: LatLng(responseBodyData[0]['space']['coordinate']['x'],
+                responseBodyData[0]['space']['coordinate']['y']));
+        ParkingModel parking = ParkingModel(
+            id: responseBodyData[0]['id'].toString(),
+            spaceId: responseBodyData[0]['spaceId'].toString());
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setCurrentParking(parking);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(3);
+        Provider.of<SpaceProvider>(context, listen: false)
+            .setActiveSpace(space);
+      } else if (responseBodyData[0]['status'] == 'PARKING') {
+        SpaceModel space = SpaceModel(
+            id: responseBodyData[0]['space']['id'],
+            name: responseBodyData[0]['space']['name'],
+            price: responseBodyData[0]['space']['price'],
+            address: responseBodyData[0]['space']['address'],
+            openTime: responseBodyData[0]['space']['openTime'],
+            closeTime: responseBodyData[0]['space']['closeTime'],
+            coordinate: LatLng(responseBodyData[0]['space']['coordinate']['x'],
+                responseBodyData[0]['space']['coordinate']['y']));
+        ParkingModel parking = ParkingModel(
+            id: responseBodyData[0]['id'].toString(),
+            spaceId: responseBodyData[0]['spaceId'].toString());
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setCurrentParking(parking);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(4);
+        Provider.of<SpaceProvider>(context, listen: false)
+            .setActiveSpace(space);
+      }
     });
   }
 
@@ -62,7 +121,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Consumer2<LanguageProvider, AuthProvider>(
       builder: (languageContext, authContext, model, child) {
-        print("build main");
         return MaterialApp(
           theme: ThemeData(
               primaryColor: const Color(0xff3277D8),
