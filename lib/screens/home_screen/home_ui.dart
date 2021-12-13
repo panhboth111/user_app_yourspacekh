@@ -400,25 +400,6 @@ class HomeUI extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    ElevatedButton(
-                      onPressed: currentLocation,
-                      child: Icon(Icons.location_on,
-                          color: Theme.of(context).primaryColor),
-                      style: ElevatedButton.styleFrom(
-                          elevation: 11,
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(15),
-                          primary: Colors.white),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    // bottomCardModel.bottomCardType != 0
-                    //     ? _getBottomCardContainer(
-                    //         context,
-                    //         bottomCardModel.bottomCardType,
-                    //         spaceModel.activeSpace)
-                    //     : Container()
                     bottomCardModel.bottomCardType != 0 &&
                             spaceModel.activeSpace != null
                         ? _getBottomCardContainer(

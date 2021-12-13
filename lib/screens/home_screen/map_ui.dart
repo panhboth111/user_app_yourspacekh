@@ -177,19 +177,49 @@ class _MapUIState extends State<MapUI> {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return GoogleMap(
-                  markers: <Marker>{
-                    _buildLocationMarker(),
-                    ..._getMarkers(spaceProvider.spaces)
-                  },
-                  zoomControlsEnabled: false,
-                  compassEnabled: false,
-                  myLocationEnabled: false,
-                  onMapCreated: _onMapCreated,
-                  initialCameraPosition: CameraPosition(
-                      zoom: 20,
-                      target: LatLng(
-                          snapshot.data!.latitude, snapshot.data!.longitude)));
+              return Stack(
+                children: [
+                  GoogleMap(
+                      markers: <Marker>{
+                        _buildLocationMarker(),
+                        ..._getMarkers(spaceProvider.spaces)
+                      },
+                      zoomControlsEnabled: false,
+                      compassEnabled: false,
+                      myLocationEnabled: false,
+                      myLocationButtonEnabled: false,
+                      onMapCreated: _onMapCreated,
+                      initialCameraPosition: CameraPosition(
+                          zoom: 20,
+                          target: LatLng(snapshot.data!.latitude,
+                              snapshot.data!.longitude))),
+                  Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                          margin: const EdgeInsets.fromLTRB(0, 0, 20, 20),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              padding: const EdgeInsets.all(15),
+                              primary: Colors.blue, // <-- Button color
+                              onPrimary: Colors.red, // <-- Splash color
+                            ),
+                            onPressed: () async {
+                              var position =
+                                  await Geolocator.getCurrentPosition();
+                              _mapController.animateCamera(
+                                  CameraUpdate.newCameraPosition(CameraPosition(
+                                      zoom: 19,
+                                      target: LatLng(position.latitude,
+                                          position.longitude))));
+                            },
+                            child: const Icon(
+                              Icons.my_location,
+                              color: Colors.white,
+                            ),
+                          )))
+                ],
+              );
             });
       });
     } else {
