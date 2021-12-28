@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/l10n/l10n.dart';
+import 'package:user_app_yourspacekh/providers/auth_provider.dart';
 import 'package:user_app_yourspacekh/providers/language_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:user_app_yourspacekh/services/user_service.dart';
 
 class ChangeLanguageScreen extends StatelessWidget {
-  const ChangeLanguageScreen({Key? key}) : super(key: key);
-
+  ChangeLanguageScreen({Key? key}) : super(key: key);
+  UserService _userService = UserService();
   Widget _getLanguageTile(BuildContext context, Locale locale) {
     return Container(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -76,10 +78,16 @@ class ChangeLanguageScreen extends StatelessWidget {
               Column(
                   children: L10n.all
                       .map((e) => GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               Provider.of<LanguageProvider>(context,
                                       listen: false)
                                   .setLocale(Locale(e.languageCode));
+                              var res = await _userService.updateUserProfile(
+                                  Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                      .user!
+                                      .name!,
+                                  e.languageCode);
                             },
                             child: _getLanguageTile(context, e),
                           ))

@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
                 .language!)));
     parkingService.getCurrentParking().then((response) {
       var responseBodyData = response['body']['data'];
-      print(responseBodyData);
+
       if (responseBodyData.length == 0) {
         Provider.of<ParkingProvider>(context, listen: false)
             .setBottomCardType(0);

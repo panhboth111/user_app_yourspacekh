@@ -24,7 +24,7 @@ class ParkingService {
     Map<String, dynamic> requestBody = {};
     var response = await HttpRequest.putRequest(
         "/parkings/" + id + "/cancel", true, requestBody);
-    print(response);
+
     if (response['success']) {
       return false;
     }

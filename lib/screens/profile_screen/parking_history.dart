@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:user_app_yourspacekh/models/parking_model.dart';
 import 'package:user_app_yourspacekh/services/parking_service.dart';
 
@@ -13,14 +14,114 @@ class ParkingHistoryScreen extends StatefulWidget {
 class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
   ParkingService _parkingService = ParkingService();
   Set<ParkingModel?> _parkings = {};
-  Widget _getHistoryCard(ParkingModel p) {
-    return SizedBox(
-      width: double.infinity,
-      child: Card(
-        elevation: 5.0,
-        child: Column(
-          children: [Text(p.space!.name)],
-        ),
+
+  Color? _statusToColor(String status) {
+    switch (status) {
+      case "BOOKING":
+        return Colors.amber[800];
+      case "ACCEPTED":
+        return Colors.cyan[500];
+      case "PARKING":
+        return Colors.blue[500];
+      case "DONE":
+        return Colors.green[500];
+      case "CANCELLED":
+        return Colors.red[900];
+      default:
+        return Colors.white;
+    }
+  }
+
+  Container _parkingInfo(ParkingModel parking) {
+    return Container(
+      height: 85,
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    parking.plateNumberCity!,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    parking.plateNumber!,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                DateFormat('dd/MM/yyyy hh:mm')
+                    .format(DateTime.parse(parking.preferredDate!)),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 15,
+                ),
+              ),
+            ],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                "3.00",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 18),
+              ),
+              Text(
+                parking.spaceName!,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+              Text(
+                parking.status!,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: _statusToColor(parking.status!),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _getHistoryCard(BuildContext context, ParkingModel parking) {
+    return Card(
+      margin: const EdgeInsets.fromLTRB(0, 10, 0, 30),
+      shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Colors.black12, width: 1.0),
+          borderRadius: BorderRadius.circular(10.0)),
+      elevation: 8,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+              child: Column(
+                children: [_parkingInfo(parking)],
+              )),
+        ],
       ),
     );
   }
@@ -73,10 +174,11 @@ class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
   Widget _getHistoryUI() {
     return Container(
       padding: EdgeInsets.all(15),
-      height: MediaQuery.of(context).size.height * 0.6,
+      // height: MediaQuery.of(context).size.height * 0.6,
       child: Column(
-        children:
-            _parkings.map((ParkingModel? p) => _getHistoryCard(p!)).toList(),
+        children: _parkings
+            .map((ParkingModel? p) => _getHistoryCard(context, p!))
+            .toList(),
       ),
     );
   }

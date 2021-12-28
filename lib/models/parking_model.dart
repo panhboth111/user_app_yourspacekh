@@ -3,26 +3,39 @@ import 'package:user_app_yourspacekh/models/space_model.dart';
 import 'package:user_app_yourspacekh/models/user_model.dart';
 
 class ParkingModel {
-  String? id, interval, preferredDate, spaceId;
+  String? id, interval,preferredDate,  plateNumber, plateNumberCity,spaceId, price, status, spaceName;
+
   UserModel? user;
   SpaceModel? space;
   ParkingModel(
       {this.id,
+      this.spaceName,
       this.interval,
       this.preferredDate,
       this.spaceId,
       this.user,
-      this.space});
+      this.space,
+      this.status,
+      this.plateNumber,
+      this.plateNumberCity,
+      this.price,
+      
+      });
 
   factory ParkingModel.fromJson(Map<String, dynamic> json) {
     var userData = json['user'];
     var spaceData = json['space'];
-    print(spaceData);
+
     return ParkingModel(
         id: json['id'].toString(),
+        spaceName: json['space']['name'],
         interval: json['interval'],
-        preferredDate: json['prefferedDate'],
+        preferredDate: json['preferredDate'],
+        price: json['price'],
         spaceId: json['spaceId'].toString(),
+        status: json['status'],
+        plateNumber: json['plateNumber'],
+        plateNumberCity: json['plateNumberCity'],
         user: UserModel(
             name: userData['name'],
             id: userData['id'].toString(),

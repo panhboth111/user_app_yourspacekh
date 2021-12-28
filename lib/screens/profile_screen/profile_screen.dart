@@ -79,7 +79,7 @@ class ProfileScreen extends StatelessWidget {
                   _getHomeAction(context, appLocal.parking_history,
                       Icons.folder, const ParkingHistoryScreen()),
                   _getHomeAction(context, appLocal.change_language,
-                      Icons.language, const ChangeLanguageScreen()),
+                      Icons.language, ChangeLanguageScreen()),
                   _getHomeAction(
                       context, appLocal.faq, Icons.message, const FAQScreen()),
                   _getHomeAction(context, appLocal.terms_and_condition,

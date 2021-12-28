@@ -227,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
-  Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
+  Future _firebaseMessagingBackgroundHandler(RemoteMessage? message) async {}
 
   @override
   void initState() {
@@ -266,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<ParkingProvider>(context, listen: false)
             .setBottomCardType(5);
       } else if (msg.data['event'] == 'done') {
-        print(msg.data);
+
         parkingCompletedDialog(context);
       }
     });

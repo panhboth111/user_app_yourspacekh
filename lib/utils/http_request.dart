@@ -74,7 +74,7 @@ class HttpRequest {
     }
 
     final url = Uri.parse(baseURL + endPoint);
-    print(accessToken);
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
@@ -167,7 +167,7 @@ class HttpRequest {
         }
         accessToken = prefs.getString("accessToken")!;
       }
-
+      print(accessToken);
       final url = Uri.parse(baseURL + endPoint);
       Map<String, String> headers = {
         'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ class HttpRequest {
 
       final response = await http.put(url,
           headers: headers, body: convert.jsonEncode(requestBody));
-      print(response.body);
+
       if (response.statusCode == 401) {
         final res = await _handleRefreshToken(refreshToken);
         if (res['success']) {
