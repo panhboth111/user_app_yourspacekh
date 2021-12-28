@@ -30,6 +30,7 @@ class _MapUIState extends State<MapUI> {
   double? _currentHeading;
 
   final Completer<GoogleMapController> _controller = Completer();
+  late StreamSubscription<CompassEvent>? _compassStream;
   late StreamSubscription<Position>? _geolocatorStream;
   late GoogleMapController _mapController;
 
@@ -54,10 +55,10 @@ class _MapUIState extends State<MapUI> {
                 .setBottomCardType(1);
             Provider.of<SpaceProvider>(context, listen: false)
                 .setActiveSpace(space);
-            setState(() {
-              _selectedSpaceId = space.id;
-            });
           }
+          setState(() {
+            _selectedSpaceId = space.id;
+          });
           _mapController.animateCamera(CameraUpdate.newCameraPosition(
               CameraPosition(target: space.coordinate, zoom: 20)));
           widget.onMarkerTap(space);
@@ -117,18 +118,22 @@ class _MapUIState extends State<MapUI> {
   Future<void> _listenCurrentLocation() async {
     await _checkLocationPermission();
 
-    FlutterCompass.events?.listen((event) {
-      setState(() {
-        _currentHeading = event.heading;
-      });
+    _compassStream = FlutterCompass.events?.listen((event) {
+      if (mounted) {
+        setState(() {
+          _currentHeading = event.heading;
+        });
+      }
     });
 
-    Geolocator.getPositionStream(
+    _geolocatorStream = Geolocator.getPositionStream(
             intervalDuration: const Duration(milliseconds: 50))
         .listen((event) {
-      setState(() {
-        _currentLocation = LatLng(event.latitude, event.longitude);
-      });
+      if (mounted) {
+        setState(() {
+          _currentLocation = LatLng(event.latitude, event.longitude);
+        });
+      }
     });
   }
 
@@ -152,6 +157,8 @@ class _MapUIState extends State<MapUI> {
     _mapController.dispose();
     _geolocatorStream?.cancel();
     _geolocatorStream = null;
+    _compassStream?.cancel();
+    _compassStream = null;
   }
 
   Marker _buildLocationMarker() {
