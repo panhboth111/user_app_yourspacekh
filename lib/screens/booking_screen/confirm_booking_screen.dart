@@ -23,6 +23,7 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
   DateTime firstDate = DateTime.now();
   DateTime lastDate = DateTime(2022);
   String errorMsg = "";
+  bool isMonthly = false;
   final TextEditingController _datePickerFieldController =
       TextEditingController();
   final TextEditingController _timePickerFieldController =
@@ -109,143 +110,298 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                     ))
                   ],
                 )),
-            Container(
-              margin: const EdgeInsets.only(left: 20, right: 20, top: 40),
-              child: Column(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("space name"),
-                      Container(
-                        margin: const EdgeInsets.only(top: 7),
-                        height: 37,
-                        child: TextField(
-                          enabled: false,
-                          controller: TextEditingController(
-                              text: widget.activeSpace!.name),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Column(
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isMonthly = false;
+                    });
+                  },
+                  child: Text(
+                    "Day",
+                    style: TextStyle(
+                        color: isMonthly
+                            ? Theme.of(context).primaryColor
+                            : Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: Size(100, 50),
+                      primary: isMonthly
+                          ? Colors.white
+                          : Theme.of(context).primaryColor),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isMonthly = true;
+                    });
+                  },
+                  child: Text(
+                    "Monthly",
+                    style: TextStyle(
+                        color: isMonthly
+                            ? Colors.white
+                            : Theme.of(context).primaryColor),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: Size(100, 50),
+                      primary: isMonthly
+                          ? Theme.of(context).primaryColor
+                          : Colors.white),
+                ),
+              ],
+            ),
+            isMonthly
+                ? Container(
+                    margin: const EdgeInsets.only(left: 20, right: 20, top: 40),
+                    child: Column(
+                      children: [
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Choose Preferred Date"),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            SizedBox(
+                            const Text("space name"),
+                            Container(
+                              margin: const EdgeInsets.only(top: 7),
                               height: 37,
-                              child: Row(
-                                children: [
-                                  Flexible(
-                                      child: DateTimeField(
-                                          controller:
-                                              _datePickerFieldController,
-                                          onChanged: (value) {},
-                                          format: DateFormat("yyyy-MM-dd"),
-                                          onShowPicker:
-                                              (context, currentValue) {
-                                            return showDatePicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime(2000),
-                                                lastDate: (DateTime(2022)));
-                                          })),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Flexible(
-                                    child: DateTimeField(
-                                      controller: _timePickerFieldController,
-                                      format: DateFormat("HH:mm a"),
-                                      onShowPicker:
-                                          (context, currentValue) async {
-                                        final time = await showTimePicker(
-                                          context: context,
-                                          initialTime: TimeOfDay.fromDateTime(
-                                              currentValue ?? DateTime.now()),
-                                        );
-                                        return DateTimeField.convert(time);
-                                      },
-                                    ),
-                                  ),
-                                ],
+                              child: TextField(
+                                enabled: false,
+                                controller: TextEditingController(
+                                    text: widget.activeSpace!.name),
                               ),
                             ),
                             const SizedBox(
                               height: 20,
                             ),
-                            Text(
-                              errorMsg,
-                              style: const TextStyle(color: Colors.red),
-                            ),
-                            const SizedBox(
-                              height: 100,
-                            ),
-
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        elevation: 0,
-                                        primary: Colors.white,
-                                        side: BorderSide(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            width: 1.5)),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                      "Cancel",
+                            SizedBox(
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("Please note that:",
                                       style: TextStyle(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                    ),
+                                          fontWeight: FontWeight.bold)),
+                                  const SizedBox(
+                                    height: 10,
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        primary:
-                                            Theme.of(context).primaryColor),
-                                    child: const Text("Confirm Booking"),
-                                    onPressed: createParking,
+                                  const Text(
+                                      " • You will receive a phone call from our team after you confirm the booking"),
+                                  const Text(
+                                      " • You have to pay for the fee in advance."),
+                                  Text(
+                                    errorMsg,
+                                    style: TextStyle(color: Colors.red),
                                   ),
-                                )
-                              ],
-                            ),
+                                  const SizedBox(
+                                    height: 100,
+                                  ),
 
-                            // Container(
-                            //   width: double.infinity,
-                            //   height: 37,
-                            //   color: Colors.red,
-                            //   child: ElevatedButton(
-                            //     style: ElevatedButton.styleFrom(
-                            //         primary: Theme.of(context).primaryColor),
-                            //     child: Text("Confirm Booking"),
-                            //     onPressed: () {
-                            //       Navigator.pop(context);
-                            //     },
-                            //   ),
-                            // )
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              elevation: 0,
+                                              primary: Colors.white,
+                                              side: BorderSide(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  width: 1.5)),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            "Cancel",
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              primary: Theme.of(context)
+                                                  .primaryColor),
+                                          child: const Text("Contact Us"),
+                                          onPressed: createParking,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+
+                                  // Container(
+                                  //   width: double.infinity,
+                                  //   height: 37,
+                                  //   color: Colors.red,
+                                  //   child: ElevatedButton(
+                                  //     style: ElevatedButton.styleFrom(
+                                  //         primary: Theme.of(context).primaryColor),
+                                  //     child: Text("Confirm Booking"),
+                                  //     onPressed: () {
+                                  //       Navigator.pop(context);
+                                  //     },
+                                  //   ),
+                                  // )
+                                ],
+                              ),
+                            )
                           ],
                         ),
-                      )
-                    ],
+                      ],
+                    ),
+                  )
+                : Container(
+                    margin: const EdgeInsets.only(left: 20, right: 20, top: 40),
+                    child: Column(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("space name"),
+                            Container(
+                              margin: const EdgeInsets.only(top: 7),
+                              height: 37,
+                              child: TextField(
+                                enabled: false,
+                                controller: TextEditingController(
+                                    text: widget.activeSpace!.name),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("Choose Preferred Date"),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  SizedBox(
+                                    height: 37,
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                            child: DateTimeField(
+                                                controller:
+                                                    _datePickerFieldController,
+                                                onChanged: (value) {},
+                                                format:
+                                                    DateFormat("yyyy-MM-dd"),
+                                                onShowPicker:
+                                                    (context, currentValue) {
+                                                  return showDatePicker(
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime(2000),
+                                                      lastDate:
+                                                          (DateTime(2022)));
+                                                })),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Flexible(
+                                          child: DateTimeField(
+                                            controller:
+                                                _timePickerFieldController,
+                                            format: DateFormat("HH:mm a"),
+                                            onShowPicker:
+                                                (context, currentValue) async {
+                                              final time = await showTimePicker(
+                                                context: context,
+                                                initialTime:
+                                                    TimeOfDay.fromDateTime(
+                                                        currentValue ??
+                                                            DateTime.now()),
+                                              );
+                                              return DateTimeField.convert(
+                                                  time);
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    errorMsg,
+                                    style: const TextStyle(color: Colors.red),
+                                  ),
+                                  const SizedBox(
+                                    height: 100,
+                                  ),
+
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              elevation: 0,
+                                              primary: Colors.white,
+                                              side: BorderSide(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  width: 1.5)),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            "Cancel",
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              primary: Theme.of(context)
+                                                  .primaryColor),
+                                          child: const Text("Confirm Booking"),
+                                          onPressed: createParking,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+
+                                  // Container(
+                                  //   width: double.infinity,
+                                  //   height: 37,
+                                  //   color: Colors.red,
+                                  //   child: ElevatedButton(
+                                  //     style: ElevatedButton.styleFrom(
+                                  //         primary: Theme.of(context).primaryColor),
+                                  //     child: Text("Confirm Booking"),
+                                  //     onPressed: () {
+                                  //       Navigator.pop(context);
+                                  //     },
+                                  //   ),
+                                  // )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
           ],
         ),
       )),

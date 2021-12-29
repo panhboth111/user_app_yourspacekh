@@ -75,6 +75,8 @@ class _MyAppState extends State<MyApp> {
             .setCurrentParking(parking);
         Provider.of<ParkingProvider>(context, listen: false)
             .setBottomCardType(2);
+        Provider.of<SpaceProvider>(context, listen: false)
+            .setActiveSpace(space);
       } else if (responseBodyData[0]['status'] == 'ACCEPTED') {
         SpaceModel space = SpaceModel(
             id: responseBodyData[0]['space']['id'],

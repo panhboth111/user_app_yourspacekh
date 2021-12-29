@@ -78,7 +78,7 @@ class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                "3.00",
+                parking.price!,
                 style: TextStyle(
                     color: Theme.of(context).primaryColor, fontSize: 18),
               ),

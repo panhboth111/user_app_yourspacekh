@@ -251,6 +251,8 @@ class _HomeScreenState extends State<HomeScreen> {
             .setBottomCardType(4);
       } else if (msg.data['event'] == 'done') {
         parkingCompletedDialog(context);
+      } else if (msg.data['event'] == 'cancelled') {
+        print("cancelled");
       }
     });
     FirebaseMessaging.onBackgroundMessage(
@@ -266,7 +268,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<ParkingProvider>(context, listen: false)
             .setBottomCardType(5);
       } else if (msg.data['event'] == 'done') {
-
         parkingCompletedDialog(context);
       }
     });

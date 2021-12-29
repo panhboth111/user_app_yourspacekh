@@ -147,8 +147,14 @@ class _MapUIState extends State<MapUI> {
     super.initState();
     _loadMarker();
     _listenCurrentLocation();
-
-    Provider.of<SpaceProvider>(context, listen: false).initialize();
+    var spaceProvider = Provider.of<SpaceProvider>(context, listen: false);
+    spaceProvider.initialize().then((value) {
+      print("id");
+      print(spaceProvider.activeSpace!.id);
+      setState(() {
+        _selectedSpaceId = spaceProvider.activeSpace!.id;
+      });
+    });
   }
 
   @override
