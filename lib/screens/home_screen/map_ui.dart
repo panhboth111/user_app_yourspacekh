@@ -51,7 +51,6 @@ class _MapUIState extends State<MapUI> {
           if (Provider.of<ParkingProvider>(context, listen: false)
                   .bottomCardType <=
               1) {
-            print(space.name);
             Provider.of<ParkingProvider>(context, listen: false)
                 .setBottomCardType(1);
             Provider.of<SpaceProvider>(context, listen: false)
