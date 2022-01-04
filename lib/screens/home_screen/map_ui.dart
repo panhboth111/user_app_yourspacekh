@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/models/space_model.dart';
 import 'package:user_app_yourspacekh/providers/parking_provider.dart';
 import 'package:user_app_yourspacekh/providers/space_provider.dart';
+import 'package:user_app_yourspacekh/screens/home_screen/disposable.dart';
 
 class MapUI extends StatefulWidget {
   final void Function(SpaceModel) onMarkerTap;
@@ -21,7 +22,7 @@ class MapUI extends StatefulWidget {
   State<MapUI> createState() => _MapUIState();
 }
 
-class _MapUIState extends State<MapUI> {
+class _MapUIState extends State<MapUI> with DisposableWidget {
   BitmapDescriptor? _markerIcon;
   BitmapDescriptor? _selectedMarkerIcon;
   BitmapDescriptor? _currentLocationIcon;
@@ -118,15 +119,15 @@ class _MapUIState extends State<MapUI> {
   Future<void> _listenCurrentLocation() async {
     await _checkLocationPermission();
 
-    _compassStream = FlutterCompass.events?.listen((event) {
+    FlutterCompass.events?.listen((event) {
       if (mounted) {
         setState(() {
           _currentHeading = event.heading;
         });
       }
-    });
+    }).canceledBy(this);
 
-    _geolocatorStream = Geolocator.getPositionStream(
+    Geolocator.getPositionStream(
             intervalDuration: const Duration(milliseconds: 50))
         .listen((event) {
       if (mounted) {
@@ -134,7 +135,7 @@ class _MapUIState extends State<MapUI> {
           _currentLocation = LatLng(event.latitude, event.longitude);
         });
       }
-    });
+    }).canceledBy(this);
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -160,11 +161,8 @@ class _MapUIState extends State<MapUI> {
   @override
   void dispose() {
     super.dispose();
+    cancelSubscriptions();
     _mapController.dispose();
-    _geolocatorStream?.cancel();
-    _geolocatorStream = null;
-    _compassStream?.cancel();
-    _compassStream = null;
   }
 
   Marker _buildLocationMarker() {
