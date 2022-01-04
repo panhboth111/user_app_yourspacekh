@@ -38,10 +38,15 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
         preferredDate: preferredDate,
         interval: "DAILY");
     var response = await _parkingService.createParking(parking);
-
+    print(response);
     if (response['success']) {
-      Navigator.pop(context);
+      var resBodyData = response['body']['data'];
+      ParkingModel currentParking = ParkingModel.fromJson(resBodyData);
+      Provider.of<ParkingProvider>(context, listen: false)
+          .setCurrentParking(currentParking);
+
       Provider.of<ParkingProvider>(context, listen: false).setBottomCardType(2);
+      Navigator.pop(context);
     }
     setState(() {
       errorMsg = response['errors'].toString();
@@ -306,7 +311,7 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                                                           DateTime.now(),
                                                       firstDate: DateTime(2000),
                                                       lastDate:
-                                                          (DateTime(2022)));
+                                                          (DateTime(3022)));
                                                 })),
                                         const SizedBox(
                                           width: 10,

@@ -6,7 +6,7 @@ class ParkingProvider extends ChangeNotifier {
   int get bottomCardType => _bottomCardType;
   ParkingModel? _currentParking;
   ParkingModel? get currentParking => _currentParking;
-  void setCurrentParking(ParkingModel parking) {
+  void setCurrentParking(ParkingModel? parking) {
     _currentParking = parking;
     notifyListeners();
   }

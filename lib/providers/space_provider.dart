@@ -9,7 +9,7 @@ class SpaceProvider extends ChangeNotifier {
   SpaceModel? _activeSpace;
   SpaceModel? get activeSpace => _activeSpace;
 
-  setActiveSpace(SpaceModel space) {
+  setActiveSpace(SpaceModel? space) {
     _activeSpace = space;
     notifyListeners();
   }

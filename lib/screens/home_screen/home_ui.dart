@@ -79,7 +79,7 @@ class HomeUI extends StatelessWidget {
                             padding:
                                 const EdgeInsets.only(left: 30, right: 30)),
                         onPressed: () {
-                          Navigator.pop(context);
+                          
                         },
                         child: const Text("Stay",
                             style: TextStyle(color: Color(0xff575F6E))),
@@ -91,8 +91,12 @@ class HomeUI extends StatelessWidget {
                                       listen: false)
                                   .currentParking!
                                   .id!);
+
                           if (response) {
+                            Provider.of<ParkingProvider>(context,listen: false).setBottomCardType(0);
+                            Provider.of<SpaceProvider>(context,listen: false).setActiveSpace(null);
                             Navigator.pop(context);
+
                           }
                         },
                         child: Text("Cancel"),

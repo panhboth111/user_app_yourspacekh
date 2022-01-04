@@ -240,6 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _userService.addToken(value!, await _getDeviceId());
     });
     FirebaseMessaging.onMessage.listen((msg) {
+      print(msg.data['event']);
       if (msg.data['event'] == 'accepted') {
         showNotification(
             context, msg.notification!.title!, msg.notification!.body!);
@@ -251,8 +252,14 @@ class _HomeScreenState extends State<HomeScreen> {
             .setBottomCardType(4);
       } else if (msg.data['event'] == 'done') {
         parkingCompletedDialog(context);
-      } else if (msg.data['event'] == 'cancelled') {
-        print("cancelled");
+      } else if (msg.data['event'] == 'denied') {
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(0);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setCurrentParking(null);
+        Provider.of<SpaceProvider>(context, listen: false).setActiveSpace(null);
+        showNotification(context, "Request Denied",
+            "The space owner denied your booking request");
       }
     });
     FirebaseMessaging.onBackgroundMessage(
@@ -269,6 +276,14 @@ class _HomeScreenState extends State<HomeScreen> {
             .setBottomCardType(5);
       } else if (msg.data['event'] == 'done') {
         parkingCompletedDialog(context);
+      } else if (msg.data['event'] == 'denied') {
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(0);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setCurrentParking(null);
+        Provider.of<SpaceProvider>(context, listen: false).setActiveSpace(null);
+        showNotification(context, "Request Denied",
+            "The space owner denied your booking request");
       }
     });
     // parkingCompletedDialog(context);
