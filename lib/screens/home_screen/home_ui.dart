@@ -435,7 +435,7 @@ class HomeUI extends StatelessWidget {
                 ],
               ),
               Container(
-                margin: const EdgeInsets.only(bottom: 30, left: 10, right: 10),
+                margin: const EdgeInsets.only(bottom: 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
