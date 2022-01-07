@@ -14,7 +14,6 @@ class ParkingHistoryScreen extends StatefulWidget {
 class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
   ParkingService _parkingService = ParkingService();
   Set<ParkingModel?> _parkings = {};
-
   Color? _statusToColor(String status) {
     switch (status) {
       case "BOOKING":
@@ -78,7 +77,7 @@ class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                parking.price!,
+                "\$" + parking.price!,
                 style: TextStyle(
                     color: Theme.of(context).primaryColor, fontSize: 18),
               ),

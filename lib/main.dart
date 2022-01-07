@@ -46,77 +46,51 @@ class _MyAppState extends State<MyApp> {
 
     userService
         .getUserInformation()
-        .then((user) =>
-            Provider.of<AuthProvider>(context, listen: false).initialize(user))
-        .then((value) => Provider.of<LanguageProvider>(context, listen: false)
-            .setLocale(Locale(Provider.of<AuthProvider>(context, listen: false)
+        .then((user) {
+          if(user != null) {
+            Provider.of<AuthProvider>(context, listen: false).initialize(user);
+                (value) => Provider.of<LanguageProvider>(context, listen: false)
+                .setLocale(Locale(Provider.of<AuthProvider>(context, listen: false)
                 .user!
-                .language!)));
-    parkingService.getCurrentParking().then((response) {
-      var responseBodyData = response['body']['data'];
+                .language!));
+                parkingService.getCurrentParking().then((response) {
+              var responseBodyData = response['body']['data'];
 
-      if (responseBodyData.length == 0) {
-        Provider.of<ParkingProvider>(context, listen: false)
-            .setBottomCardType(0);
-      } else if (responseBodyData[0]['status'] == 'BOOKING') {
-        SpaceModel space = SpaceModel(
-            id: responseBodyData[0]['space']['id'],
-            name: responseBodyData[0]['space']['name'],
-            price: responseBodyData[0]['space']['price'],
-            address: responseBodyData[0]['space']['address'],
-            openTime: responseBodyData[0]['space']['openTime'],
-            closeTime: responseBodyData[0]['space']['closeTime'],
-            coordinate: LatLng(responseBodyData[0]['space']['coordinate']['x'],
-                responseBodyData[0]['space']['coordinate']['y']));
-        ParkingModel parking = ParkingModel(
-            id: responseBodyData[0]['id'].toString(),
-            spaceId: responseBodyData[0]['spaceId'].toString());
-        Provider.of<ParkingProvider>(context, listen: false)
-            .setCurrentParking(parking);
-        Provider.of<ParkingProvider>(context, listen: false)
-            .setBottomCardType(2);
-        Provider.of<SpaceProvider>(context, listen: false)
-            .setActiveSpace(space);
-      } else if (responseBodyData[0]['status'] == 'ACCEPTED') {
-        SpaceModel space = SpaceModel(
-            id: responseBodyData[0]['space']['id'],
-            name: responseBodyData[0]['space']['name'],
-            price: responseBodyData[0]['space']['price'],
-            address: responseBodyData[0]['space']['address'],
-            openTime: responseBodyData[0]['space']['openTime'],
-            closeTime: responseBodyData[0]['space']['closeTime'],
-            coordinate: LatLng(responseBodyData[0]['space']['coordinate']['x'],
-                responseBodyData[0]['space']['coordinate']['y']));
-        ParkingModel parking = ParkingModel(
-            id: responseBodyData[0]['id'].toString(),
-            spaceId: responseBodyData[0]['spaceId'].toString());
-        Provider.of<ParkingProvider>(context, listen: false)
-            .setCurrentParking(parking);
-        Provider.of<ParkingProvider>(context, listen: false)
-            .setBottomCardType(3);
-        Provider.of<SpaceProvider>(context, listen: false)
-            .setActiveSpace(space);
-      } else if (responseBodyData[0]['status'] == 'PARKING') {
-        SpaceModel space = SpaceModel(
-            id: responseBodyData[0]['space']['id'],
-            name: responseBodyData[0]['space']['name'],
-            price: responseBodyData[0]['space']['price'],
-            address: responseBodyData[0]['space']['address'],
-            openTime: responseBodyData[0]['space']['openTime'],
-            closeTime: responseBodyData[0]['space']['closeTime'],
-            coordinate: LatLng(responseBodyData[0]['space']['coordinate']['x'],
-                responseBodyData[0]['space']['coordinate']['y']));
-        ParkingModel parking = ParkingModel(
-            id: responseBodyData[0]['id'].toString(),
-            spaceId: responseBodyData[0]['spaceId'].toString());
-        Provider.of<ParkingProvider>(context, listen: false)
-            .setCurrentParking(parking);
-        Provider.of<ParkingProvider>(context, listen: false)
-            .setBottomCardType(4);
-        Provider.of<SpaceProvider>(context, listen: false)
-            .setActiveSpace(space);
-      }
-    });
+              if (responseBodyData.length == 0) {
+                Provider.of<ParkingProvider>(context, listen: false)
+                    .setBottomCardType(0);
+              } else if (responseBodyData[0]['status'] == 'BOOKING') {
+                SpaceModel space = SpaceModel.fromJson(responseBodyData[0]['space']);
+                ParkingModel parking = ParkingModel.fromJson(responseBodyData[0]);
+                Provider.of<ParkingProvider>(context, listen: false)
+                    .setCurrentParking(parking);
+                Provider.of<ParkingProvider>(context, listen: false)
+                    .setBottomCardType(2);
+                Provider.of<SpaceProvider>(context, listen: false)
+                    .setActiveSpace(space);
+              } else if (responseBodyData[0]['status'] == 'ACCEPTED') {
+                SpaceModel space = SpaceModel.fromJson(responseBodyData[0]['space']);
+                ParkingModel parking = ParkingModel.fromJson(responseBodyData[0]);
+                Provider.of<ParkingProvider>(context, listen: false)
+                    .setCurrentParking(parking);
+                Provider.of<ParkingProvider>(context, listen: false)
+                    .setBottomCardType(3);
+                Provider.of<SpaceProvider>(context, listen: false)
+                    .setActiveSpace(space);
+              } else if (responseBodyData[0]['status'] == 'PARKING') {
+                SpaceModel space = SpaceModel.fromJson(responseBodyData[0]['space']);
+                ParkingModel parking = ParkingModel.fromJson(responseBodyData[0]);
+                Provider.of<ParkingProvider>(context, listen: false)
+                    .setCurrentParking(parking);
+                Provider.of<ParkingProvider>(context, listen: false)
+                    .setBottomCardType(4);
+                Provider.of<SpaceProvider>(context, listen: false)
+                    .setActiveSpace(space);
+              }
+            });
+          }
+        });
+
   }
 
   @override

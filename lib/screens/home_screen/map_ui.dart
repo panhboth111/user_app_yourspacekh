@@ -82,9 +82,9 @@ class _MapUIState extends State<MapUI> with DisposableWidget {
 
   void _loadMarker() async {
     _markerIcon = BitmapDescriptor.fromBytes(
-        await _getBytesFromAsset('assets/images/normalMarker.png', 90));
+        await _getBytesFromAsset('assets/images/marker.png', 90));
     _selectedMarkerIcon = BitmapDescriptor.fromBytes(
-        await _getBytesFromAsset('assets/images/selectedMarker.png', 110));
+        await _getBytesFromAsset('assets/images/activeMarker.png', 110));
     _currentLocationIcon = BitmapDescriptor.fromBytes(
         await _getBytesFromAsset('assets/images/current_location.png', 110));
   }

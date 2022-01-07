@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/models/space_model.dart';
 import 'package:user_app_yourspacekh/providers/auth_provider.dart';
@@ -28,7 +30,22 @@ class HomeUI extends StatelessWidget {
                   activeSpace: space,
                 )));
   }
-
+  timeFormat(String time){
+    var timeSplit = time.split(":");
+    var originalHour = int.parse(timeSplit[0]);
+    var hour = "";
+    TimeOfDay timeOfDay =  TimeOfDay(hour: int.parse(timeSplit[0]), minute: int.parse(timeSplit[1]));
+    if(originalHour <= 12) {
+      hour = originalHour.toString();
+    }
+    else {
+      var remainder = originalHour % 12;
+      hour = remainder.toString();
+    }
+    return hour +":"+timeSplit[1] + " "+timeOfDay.period.toString().split(".")[1].toUpperCase();
+    // TimeOfDay timeOfDay =  TimeOfDay(hour: int.parse(time.split(":")[0]), minute: int.parse(time.split(":")[1]));
+    // return timeOfDay.period;
+  }
   onContactUsPressed() {}
   _getReceiptText(String title, String value) {
     return Column(
@@ -174,6 +191,7 @@ class HomeUI extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
@@ -184,19 +202,19 @@ class HomeUI extends StatelessWidget {
                               const SizedBox(
                                 width: 4,
                               ),
-                              const Text("Open:24/7"),
+                               Text("Open: "+timeFormat(activeSpace.openTime)+"-"+timeFormat(activeSpace.closeTime)),
                             ],
                           ),
                           Row(
                             children: [
                               Icon(
-                                Icons.car_rental,
+                                Icons.car_repair,
                                 color: Theme.of(context).primaryColor,
                               ),
                               const SizedBox(
                                 width: 4,
                               ),
-                              Text("Price: " + activeSpace.price),
+                              Text("Price: \$" + activeSpace.price +"/night"),
                             ],
                           ),
                         ],
@@ -246,6 +264,23 @@ class HomeUI extends StatelessWidget {
                     child: Text(
                       appLocal.contact_us,
                       style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                        side: BorderSide(
+                            width: 2, color: Theme.of(context).primaryColor),
+                        padding: const EdgeInsets.only(left: 30, right: 30)),
+                    onPressed: () {
+                      // _parkingService.cancelParking();
+                      onCancelBookingPressed(context);
+                    },
+                    child: Text(
+                      appLocal.cancel_booking,
+                      style: TextStyle(
+                          fontSize: 20, color: Theme.of(context).primaryColor),
                     ),
                   )
                 ],

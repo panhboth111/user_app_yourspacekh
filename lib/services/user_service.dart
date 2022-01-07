@@ -22,7 +22,7 @@ class UserService {
     var response = await HttpRequest.getRequest('/profile', true);
     return response['success']
         ? _parseUserModel(response['body']['data'])
-        : UserModel(id: null, name: null, phoneNumber: null, language: "km");
+        : null;
   }
 
   getCities() async {

@@ -8,6 +8,7 @@ class AuthProvider extends ChangeNotifier {
   UserModel? get user => _user;
 
   initialize(UserModel? user) async {
+
     _user = user;
 
     if (user!.name == null && user.phoneNumber != null) {

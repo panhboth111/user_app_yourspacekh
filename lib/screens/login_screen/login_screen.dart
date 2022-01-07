@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+import 'package:provider/provider.dart';
+import 'package:user_app_yourspacekh/models/parking_model.dart';
+import 'package:user_app_yourspacekh/models/space_model.dart';
+import 'package:user_app_yourspacekh/providers/auth_provider.dart';
+import 'package:user_app_yourspacekh/providers/language_provider.dart';
+import 'package:user_app_yourspacekh/providers/parking_provider.dart';
+import 'package:user_app_yourspacekh/providers/space_provider.dart';
 import 'package:user_app_yourspacekh/screens/home_screen/home_screen.dart';
 import 'package:user_app_yourspacekh/screens/register_screen/register_screen.dart';
+import 'package:user_app_yourspacekh/services/parking_service.dart';
 import 'package:user_app_yourspacekh/services/user_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _pinController = TextEditingController();
   final UserService _userService = UserService();
+  final ParkingService _parkingService = ParkingService();
 
   bool _phoneBtnEnabled = false;
   bool _pinBtnEnabled = false;
@@ -44,6 +53,49 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       return;
     }
+    _userService
+        .getUserInformation()
+        .then((user) =>
+        Provider.of<AuthProvider>(context, listen: false).initialize(user))
+        .then((value) => Provider.of<LanguageProvider>(context, listen: false)
+        .setLocale(Locale(Provider.of<AuthProvider>(context, listen: false)
+        .user!
+        .language!)));
+    _parkingService.getCurrentParking().then((response) {
+      var responseBodyData = response['body']['data'];
+
+      if (responseBodyData.length == 0) {
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(0);
+      } else if (responseBodyData[0]['status'] == 'BOOKING') {
+        SpaceModel space = SpaceModel.fromJson(responseBodyData[0]['space']);
+        ParkingModel parking = ParkingModel.fromJson(responseBodyData[0]);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setCurrentParking(parking);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(2);
+        Provider.of<SpaceProvider>(context, listen: false)
+            .setActiveSpace(space);
+      } else if (responseBodyData[0]['status'] == 'ACCEPTED') {
+        SpaceModel space = SpaceModel.fromJson(responseBodyData[0]['space']);
+        ParkingModel parking = ParkingModel.fromJson(responseBodyData[0]);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setCurrentParking(parking);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(3);
+        Provider.of<SpaceProvider>(context, listen: false)
+            .setActiveSpace(space);
+      } else if (responseBodyData[0]['status'] == 'PARKING') {
+        SpaceModel space = SpaceModel.fromJson(responseBodyData[0]['space']);
+        ParkingModel parking = ParkingModel.fromJson(responseBodyData[0]);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setCurrentParking(parking);
+        Provider.of<ParkingProvider>(context, listen: false)
+            .setBottomCardType(4);
+        Provider.of<SpaceProvider>(context, listen: false)
+            .setActiveSpace(space);
+      }
+    });
     Navigator.pushReplacement<void, void>(
       context,
       MaterialPageRoute<void>(
@@ -72,13 +124,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onPinTextChanged(value) {
     if (!_pinBtnEnabled) {
-      if (_pinController.text.length == 4) {
+      if (_pinController.text.length == 6) {
         setState(() {
           _pinBtnEnabled = true;
         });
       }
     } else if (_pinBtnEnabled) {
-      if (_pinController.text.length < 4) {
+      if (_pinController.text.length < 6) {
         setState(() {
           _pinBtnEnabled = false;
           errorMsg = "";

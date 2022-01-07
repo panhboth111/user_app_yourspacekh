@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:user_app_yourspacekh/providers/auth_provider.dart';
+import 'package:user_app_yourspacekh/providers/parking_provider.dart';
+import 'package:user_app_yourspacekh/providers/space_provider.dart';
 import 'package:user_app_yourspacekh/screens/home_screen/home_screen.dart';
 import 'package:user_app_yourspacekh/screens/profile_screen/change_language_screen.dart';
 
@@ -111,6 +113,9 @@ class ProfileScreen extends StatelessWidget {
                           await _userService.logout();
                           Provider.of<AuthProvider>(context, listen: false)
                               .logout();
+                          Provider.of<SpaceProvider>(context,listen: false).setActiveSpace(null);
+                          Provider.of<ParkingProvider>(context,listen: false).setBottomCardType(0);
+                          Provider.of<ParkingProvider>(context,listen: false).setCurrentParking(null);
                           Navigator.pushReplacement<void, void>(
                             context,
                             MaterialPageRoute<void>(

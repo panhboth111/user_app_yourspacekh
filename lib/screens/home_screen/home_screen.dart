@@ -262,8 +262,8 @@ class _HomeScreenState extends State<HomeScreen> {
             "The space owner denied your booking request");
       }
     });
-    FirebaseMessaging.onBackgroundMessage(
-        (message) => _firebaseMessagingBackgroundHandler(message));
+    // FirebaseMessaging.onBackgroundMessage(
+    //     (message) => _firebaseMessagingBackgroundHandler(message));
     FirebaseMessaging.onMessageOpenedApp.listen((msg) {
       showNotification(
           context, msg.notification!.title!, msg.notification!.body!);
