@@ -103,8 +103,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Column(
                 children: [
                   _getTextField(appLocal.your_name, _nameController),
-                  _getTextField(appLocal.phone, _phoneController),
-                  _getTextField("Telegram", _telegramController),
+
                 ],
               ),
             ),
