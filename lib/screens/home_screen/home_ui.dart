@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_new, must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -14,10 +12,12 @@ import 'package:user_app_yourspacekh/screens/login_screen/login_screen.dart';
 import 'package:user_app_yourspacekh/screens/profile_screen/profile_screen.dart';
 import 'package:user_app_yourspacekh/screens/register_screen/register_screen.dart';
 import 'package:user_app_yourspacekh/services/parking_service.dart';
+import 'package:user_app_yourspacekh/services/user_service.dart';
 
 class HomeUI extends StatelessWidget {
   final currentLocation;
-  ParkingService _parkingService = ParkingService();
+  final ParkingService _parkingService = ParkingService();
+  final UserService _userService = UserService();
   late SpaceModel? activeSpace;
 
   HomeUI({Key? key, this.currentLocation, this.activeSpace}) : super(key: key);
@@ -30,23 +30,28 @@ class HomeUI extends StatelessWidget {
                   activeSpace: space,
                 )));
   }
-  timeFormat(String time){
+
+  timeFormat(String time) {
     var timeSplit = time.split(":");
     var originalHour = int.parse(timeSplit[0]);
     var hour = "";
-    TimeOfDay timeOfDay =  TimeOfDay(hour: int.parse(timeSplit[0]), minute: int.parse(timeSplit[1]));
-    if(originalHour <= 12) {
+    TimeOfDay timeOfDay = TimeOfDay(
+        hour: int.parse(timeSplit[0]), minute: int.parse(timeSplit[1]));
+    if (originalHour <= 12) {
       hour = originalHour.toString();
-    }
-    else {
+    } else {
       var remainder = originalHour % 12;
       hour = remainder.toString();
     }
-    return hour +":"+timeSplit[1] + " "+timeOfDay.period.toString().split(".")[1].toUpperCase();
+    return hour +
+        ":" +
+        timeSplit[1] +
+        " " +
+        timeOfDay.period.toString().split(".")[1].toUpperCase();
     // TimeOfDay timeOfDay =  TimeOfDay(hour: int.parse(time.split(":")[0]), minute: int.parse(time.split(":")[1]));
     // return timeOfDay.period;
   }
-  onContactUsPressed() {}
+
   _getReceiptText(String title, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,9 +100,7 @@ class HomeUI extends StatelessWidget {
                                 width: 2, color: Color(0xff575F6E)),
                             padding:
                                 const EdgeInsets.only(left: 30, right: 30)),
-                        onPressed: () {
-                          
-                        },
+                        onPressed: () {},
                         child: const Text("Stay",
                             style: TextStyle(color: Color(0xff575F6E))),
                       ),
@@ -110,10 +113,11 @@ class HomeUI extends StatelessWidget {
                                   .id!);
 
                           if (response) {
-                            Provider.of<ParkingProvider>(context,listen: false).setBottomCardType(0);
-                            Provider.of<SpaceProvider>(context,listen: false).setActiveSpace(null);
+                            Provider.of<ParkingProvider>(context, listen: false)
+                                .setBottomCardType(0);
+                            Provider.of<SpaceProvider>(context, listen: false)
+                                .setActiveSpace(null);
                             Navigator.pop(context);
-
                           }
                         },
                         child: Text("Cancel"),
@@ -129,6 +133,51 @@ class HomeUI extends StatelessWidget {
             ),
           );
         });
+  }
+
+  onContactUsPressed(BuildContext context) async {
+    var appLocal = AppLocalizations.of(context);
+    var response = await _userService.contactus();
+    if (response['success']) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40)),
+              elevation: 16,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.25,
+                padding: const EdgeInsets.all(15),
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(appLocal!.contact_us,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 20),
+                    Text(appLocal.contact_us_desc,
+                        textAlign: TextAlign.center,
+                        style:
+                            TextStyle(fontSize: 14, color: Colors.grey[500])),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).primaryColor),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text("Okay")),
+                    )
+                  ],
+                ),
+              ),
+            );
+          });
+    }
   }
 
   void onQRCodePressed() {}
@@ -202,7 +251,10 @@ class HomeUI extends StatelessWidget {
                               const SizedBox(
                                 width: 4,
                               ),
-                               Text("Open: "+timeFormat(activeSpace.openTime)+"-"+timeFormat(activeSpace.closeTime)),
+                              Text("Open: " +
+                                  timeFormat(activeSpace.openTime) +
+                                  "-" +
+                                  timeFormat(activeSpace.closeTime)),
                             ],
                           ),
                           Row(
@@ -214,7 +266,7 @@ class HomeUI extends StatelessWidget {
                               const SizedBox(
                                 width: 4,
                               ),
-                              Text("Price: \$" + activeSpace.price +"/night"),
+                              Text("Price: \$" + activeSpace.price + "/night"),
                             ],
                           ),
                         ],
@@ -260,13 +312,14 @@ class HomeUI extends StatelessWidget {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.only(left: 30, right: 30)),
-                    onPressed: () {},
+                    onPressed: () {
+                      onContactUsPressed(context);
+                    },
                     child: Text(
                       appLocal.contact_us,
                       style: const TextStyle(fontSize: 20),
                     ),
                   ),
-
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         primary: Colors.white,

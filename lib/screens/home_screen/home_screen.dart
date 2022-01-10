@@ -23,7 +23,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   SpaceService spaceService = SpaceService();
-  UserService _userService = UserService();
+  final UserService _userService = UserService();
   late FirebaseMessaging messaging;
   void onMarkerTap(SpaceModel spaceModel) {}
 
@@ -41,131 +41,132 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   parkingCompletedDialog(BuildContext context) {
-    SpaceProvider spaceProvider =
-        Provider.of<SpaceProvider>(context, listen: false);
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            elevation: 16,
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.65,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 80,
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Parking Receipt",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                        Text(spaceProvider.activeSpace!.price,
-                            style: TextStyle(
-                                fontSize: 36,
-                                color: Theme.of(context).primaryColor)),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: const Text("SUCCESSFULLY PAID",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.only(top: 35, bottom: 35),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _getReceiptText(
-                                      "Transaction Number", "#11012013010"),
-                                  _getReceiptText("Parking Lot",
-                                      spaceProvider.activeSpace!.name),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _getReceiptText(
-                                      "Transaction Number", "#11012013010"),
-                                  _getReceiptText(
-                                      "Parking Lot", "Mitpheap Parking"),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 40),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text("Transaction Problem?"),
-                              Text("Contact Us"),
-                            ],
-                          )
-                        ],
-                      )),
-                  Container(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 10, bottom: 10),
-                            primary: Theme.of(context).primaryColor,
-                          ),
-                          onPressed: () {
-                            Provider.of<ParkingProvider>(context, listen: false)
-                                .setBottomCardType(0);
-                            Navigator.pop(context);
-                          },
-                          child: Text("Leave Feedback")),
-                      width: double.infinity),
-                  Container(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Provider.of<ParkingProvider>(context, listen: false)
-                              .setBottomCardType(0);
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "Okay",
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          side: BorderSide(
-                              width: 2, color: Theme.of(context).primaryColor),
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 10, bottom: 10),
-                          primary: Colors.white,
-                        ),
-                      ),
-                      width: double.infinity),
-                ],
-              ),
-            ),
-          );
-        });
+    Provider.of<ParkingProvider>(context, listen: false).setBottomCardType(0);
+    // SpaceProvider spaceProvider =
+    //     Provider.of<SpaceProvider>(context, listen: false);
+    // return showDialog(
+    //     context: context,
+    //     builder: (context) {
+    //       return Dialog(
+    //         shape:
+    //             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    //         elevation: 16,
+    //         child: SizedBox(
+    //           height: MediaQuery.of(context).size.height * 0.65,
+    //           child: Column(
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             children: [
+    //               SizedBox(
+    //                 height: 80,
+    //                 width: double.infinity,
+    //                 child: Column(
+    //                   mainAxisAlignment: MainAxisAlignment.center,
+    //                   crossAxisAlignment: CrossAxisAlignment.center,
+    //                   children: [
+    //                     const Text(
+    //                       "Parking Receipt",
+    //                       style: TextStyle(
+    //                           fontWeight: FontWeight.bold, fontSize: 18),
+    //                     ),
+    //                     Text(spaceProvider.activeSpace!.price,
+    //                         style: TextStyle(
+    //                             fontSize: 36,
+    //                             color: Theme.of(context).primaryColor)),
+    //                   ],
+    //                 ),
+    //               ),
+    //               Container(
+    //                 width: double.infinity,
+    //                 padding: const EdgeInsets.only(top: 20, bottom: 20),
+    //                 child: const Text("SUCCESSFULLY PAID",
+    //                     textAlign: TextAlign.center,
+    //                     style: TextStyle(
+    //                         fontSize: 16,
+    //                         fontWeight: FontWeight.bold,
+    //                         color: Colors.white)),
+    //                 color: Theme.of(context).primaryColor,
+    //               ),
+    //               Container(
+    //                   width: double.infinity,
+    //                   padding: EdgeInsets.only(top: 35, bottom: 35),
+    //                   child: Column(
+    //                     children: [
+    //                       Row(
+    //                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //                         crossAxisAlignment: CrossAxisAlignment.center,
+    //                         children: [
+    //                           Column(
+    //                             crossAxisAlignment: CrossAxisAlignment.start,
+    //                             children: [
+    //                               _getReceiptText(
+    //                                   "Transaction Number", "#11012013010"),
+    //                               _getReceiptText("Parking Lot",
+    //                                   spaceProvider.activeSpace!.name),
+    //                             ],
+    //                           ),
+    //                           Column(
+    //                             crossAxisAlignment: CrossAxisAlignment.start,
+    //                             children: [
+    //                               _getReceiptText(
+    //                                   "Transaction Number", "#11012013010"),
+    //                               _getReceiptText(
+    //                                   "Parking Lot", "Mitpheap Parking"),
+    //                             ],
+    //                           ),
+    //                         ],
+    //                       ),
+    //                       const SizedBox(height: 40),
+    //                       Row(
+    //                         mainAxisAlignment: MainAxisAlignment.center,
+    //                         children: const [
+    //                           Text("Transaction Problem?"),
+    //                           Text("Contact Us"),
+    //                         ],
+    //                       )
+    //                     ],
+    //                   )),
+    //               Container(
+    //                   padding: const EdgeInsets.only(left: 20, right: 20),
+    //                   child: ElevatedButton(
+    //                       style: ElevatedButton.styleFrom(
+    //                         padding: const EdgeInsets.only(
+    //                             left: 20, right: 20, top: 10, bottom: 10),
+    //                         primary: Theme.of(context).primaryColor,
+    //                       ),
+    //                       onPressed: () {
+    //                         Provider.of<ParkingProvider>(context, listen: false)
+    //                             .setBottomCardType(0);
+    //                         Navigator.pop(context);
+    //                       },
+    //                       child: Text("Leave Feedback")),
+    //                   width: double.infinity),
+    //               Container(
+    //                   padding: const EdgeInsets.only(left: 20, right: 20),
+    //                   child: ElevatedButton(
+    //                     onPressed: () {
+    //                       Provider.of<ParkingProvider>(context, listen: false)
+    //                           .setBottomCardType(0);
+    //                       Navigator.pop(context);
+    //                     },
+    //                     child: Text(
+    //                       "Okay",
+    //                       style:
+    //                           TextStyle(color: Theme.of(context).primaryColor),
+    //                     ),
+    //                     style: ElevatedButton.styleFrom(
+    //                       side: BorderSide(
+    //                           width: 2, color: Theme.of(context).primaryColor),
+    //                       padding: const EdgeInsets.only(
+    //                           left: 20, right: 20, top: 10, bottom: 10),
+    //                       primary: Colors.white,
+    //                     ),
+    //                   ),
+    //                   width: double.infinity),
+    //             ],
+    //           ),
+    //         ),
+    //       );
+    //     });
   }
 
   _getDeviceId() async {

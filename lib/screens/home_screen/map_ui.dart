@@ -150,9 +150,10 @@ class _MapUIState extends State<MapUI> with DisposableWidget {
     _listenCurrentLocation();
     var spaceProvider = Provider.of<SpaceProvider>(context, listen: false);
     spaceProvider.initialize().then((value) {
-
       setState(() {
-        _selectedSpaceId = spaceProvider.activeSpace!.id;
+        if (spaceProvider.activeSpace != null) {
+          _selectedSpaceId = spaceProvider.activeSpace!.id;
+        }
       });
     });
   }
@@ -190,15 +191,18 @@ class _MapUIState extends State<MapUI> with DisposableWidget {
               return Stack(
                 children: [
                   GoogleMap(
-                    onTap: (value){
-                      var spaceProvider = Provider.of<SpaceProvider>(context,listen:false);
-                      var parkingProvider = Provider.of<ParkingProvider>(context,listen:false);
-                      if(parkingProvider.bottomCardType == 1) {
-                        spaceProvider.setActiveSpace(null);
-                        parkingProvider.setBottomCardType(0);
-                        parkingProvider.setCurrentParking(null);
-                      }
-                    },
+                      onTap: (value) {
+                        var spaceProvider =
+                            Provider.of<SpaceProvider>(context, listen: false);
+                        var parkingProvider = Provider.of<ParkingProvider>(
+                            context,
+                            listen: false);
+                        if (parkingProvider.bottomCardType == 1) {
+                          spaceProvider.setActiveSpace(null);
+                          parkingProvider.setBottomCardType(0);
+                          parkingProvider.setCurrentParking(null);
+                        }
+                      },
                       markers: <Marker>{
                         _buildLocationMarker(),
                         ..._getMarkers(spaceProvider.spaces)

@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // utility class for making http requests because it's such a pain in the ass
 class HttpRequest {
-  static String baseURL = 'http://139.59.101.195:8081';
+  static String baseURL = 'http://128.199.229.32:8081';
   static postRequest(
       String endPoint, bool isPrivateRoute, dynamic requestBody) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -43,7 +43,9 @@ class HttpRequest {
       return response.statusCode == 200 || response.statusCode == 201
           ? {
               'success': true,
-              'body': convert.jsonDecode(response.body),
+              'body': response.body.isNotEmpty
+                  ? convert.jsonDecode(response.body)
+                  : null,
               'errors': ''
             }
           : {

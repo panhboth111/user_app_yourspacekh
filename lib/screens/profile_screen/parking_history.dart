@@ -63,8 +63,10 @@ class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
                 ],
               ),
               Text(
-                DateFormat('dd/MM/yyyy hh:mm')
-                    .format(DateTime.parse(parking.preferredDate!)),
+                parking.preferredDate != null
+                    ? DateFormat('dd/MM/yyyy hh:mm a')
+                        .format(DateTime.parse(parking.preferredDate!))
+                    : "",
                 style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 15,

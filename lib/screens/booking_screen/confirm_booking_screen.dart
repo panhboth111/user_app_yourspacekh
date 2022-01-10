@@ -38,7 +38,6 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
         preferredDate: preferredDate,
         interval: "DAILY");
     var response = await _parkingService.createParking(parking);
-    print(response);
     if (response['success']) {
       var resBodyData = response['body']['data'];
       ParkingModel currentParking = ParkingModel.fromJson(resBodyData);
@@ -47,6 +46,61 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
 
       Provider.of<ParkingProvider>(context, listen: false).setBottomCardType(2);
       Navigator.pop(context);
+    }
+    setState(() {
+      errorMsg = response['errors'].toString();
+    });
+  }
+
+  showMonthlyParkingDialog(BuildContext context) async {
+    var appLocal = AppLocalizations.of(context);
+
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+            elevation: 16,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.25,
+              padding: const EdgeInsets.all(15),
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(appLocal!.monthly_parking,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 20),
+                  Text(appLocal.monthly_parking_desc,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.grey[500])),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Okay")),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  createMonthlyParking() async {
+    ParkingModel parking = ParkingModel(
+        spaceId: widget.activeSpace!.id.toString(), interval: "MONTHLY");
+    var response = await _parkingService.createParking(parking);
+    if (response['success']) {
+      Navigator.pop(context);
+      showMonthlyParkingDialog(context);
     }
     setState(() {
       errorMsg = response['errors'].toString();
@@ -236,7 +290,7 @@ class _ConfirmBookingScreenState extends State<ConfirmBookingScreen> {
                                               primary: Theme.of(context)
                                                   .primaryColor),
                                           child: const Text("Contact Us"),
-                                          onPressed: createParking,
+                                          onPressed: createMonthlyParking,
                                         ),
                                       )
                                     ],

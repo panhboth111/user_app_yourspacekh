@@ -87,4 +87,9 @@ class UserService {
     prefs.setString('accessToken', "");
     prefs.setString('refreshToken', "");
   }
+
+  contactus() async {
+    final response = await HttpRequest.postRequest("/contactus", true, {});
+    return response;
+  }
 }

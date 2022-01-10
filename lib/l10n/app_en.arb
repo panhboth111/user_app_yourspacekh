@@ -25,6 +25,9 @@
     "contact_us":"Contact Us",
     "currently_reserving":"You're currently reserving a spot at",
     "cancel_booking":"Cancel Booking",
-    "cancel_desc":"We already connected you to our partner. They would be sad if you cancelled it.",
-    "currently_parking":"You are currently parking at"
+    "cancel_desc":"We already connected you to our partner.They would be sad if you cancelled it.",
+    "currently_parking":"You are currently parking at",
+    "monthly_parking": "Monthly Parking",
+    "monthly_parking_desc": "We have received your request. We will get back to you soon.",
+    "contact_us_desc": "We have received your request. We will get back to you soon."
 }
