@@ -2,8 +2,9 @@
     package="com.example.user_app_yourspacekh">
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.INTERNET" />
   <application
-        android:label="Yourspace KH"
+        android:label="Your Space - Finding Parking Spot"
         android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyDaAwxVi9PUQVp51-fLii2saE1hAxwcKSc"/>
